@@ -1,15 +1,16 @@
-import { Address } from 'eth-connect'
+import * as eth from '../../../eth-connect/eth-connect'
+
 
 import * as ERC20 from 'src/erc20'
 import * as ERC721 from 'src/erc721'
 import { addresses } from 'src/utils/contract'
 import { getUserAccount } from '@decentraland/EthereumController'
 
-export async function isAuthorizedAll(address?: Address) {
+export async function isAuthorizedAll(address?: eth.Address) {
   if (!address) address = await getUserAccount()
 
   const authorized: {
-    [key: string]: { [key: string]: { address: Address; authorized: boolean } }
+    [key: string]: { [key: string]: { address: eth.Address; authorized: boolean } }
   } = {
     buying: {
       mana: { address: addresses.mainnet.MANAToken, authorized: false }

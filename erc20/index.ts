@@ -1,23 +1,24 @@
 import { getProvider } from '@decentraland/web3-provider'
 import { getUserAccount } from '@decentraland/EthereumController'
-import { RequestManager, ContractFactory } from '../../node_modules/eth-connect/esm'
-import { Address } from '../../node_modules/eth-connect'
+import * as ethEsm from '../../eth-connect/esm'
+
+import * as eth from '../../eth-connect/eth-connect'
 
 import abi from './abi'
 import { Erc20 } from './erc20'
 
 /** Return Contract, Provider and RequestManager */
-export async function getContract(contractAddress: Address) {
+export async function getContract(contractAddress: eth.Address) {
   const provider = await getProvider()
-  const requestManager = new RequestManager(provider)
-  const factory = new ContractFactory(requestManager, abi)
+  const requestManager = new ethEsm.RequestManager(provider)
+  const factory = new ethEsm.ContractFactory(requestManager, abi)
   const contract = (await factory.at(contractAddress)) as Erc20
   return { contract, provider, requestManager }
 }
 
 export async function sendERC20(
-  contractAddress: Address,
-  toAddress: Address,
+  contractAddress: eth.Address,
+  toAddress: eth.Address,
   amount: number
 ) {
   const { contract } = await getContract(
@@ -29,7 +30,7 @@ export async function sendERC20(
   return res
 }
 
-export function sendMana(toAddress: Address, amount: number) {
+export function sendMana(toAddress: eth.Address, amount: number) {
   return sendERC20(
     '0x0f5d2fb29fb7d3cfee444a200298f468908cc942',
     toAddress,
@@ -39,9 +40,9 @@ export function sendMana(toAddress: Address, amount: number) {
 
 /** Return true if the address is allowed to spend more than 1M token */
 export async function isApproved(
-  contractAddress: Address,
-  owner: Address,
-  spender: Address
+  contractAddress: eth.Address,
+  owner: eth.Address,
+  spender: eth.Address
 ) {
   const { contract } = await getContract(
     contractAddress

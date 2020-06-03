@@ -1,10 +1,10 @@
-import { Address, toWei } from "eth-connect"
+import { eth } from "../../export"
 import { getUserAccount } from "@decentraland/EthereumController"
 import { getContract } from "../contract"
 
 /** Create an order, price in MANA (1 = 1 MANA) */
 export async function createOrder(
-  nftAddress: Address,
+  nftAddress: eth.Address,
   assetId: number,
   price: number,
   expireAt: number
@@ -15,7 +15,7 @@ export async function createOrder(
   const res = await contract.createOrder(
     nftAddress,
     assetId,
-    toWei(price, 'ether').toString(),
+    eth.toWei(price, 'ether').toString(),
     expireAt,
     {
       from: fromAddress

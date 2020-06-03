@@ -1,23 +1,24 @@
 import { getProvider } from '@decentraland/web3-provider'
 import { getUserAccount } from '@decentraland/EthereumController'
-import { RequestManager, ContractFactory } from 'eth-connect/esm'
-import { Address } from 'eth-connect'
+import * as ethEsm from '../../eth-connect/esm'
+
+import * as eth from '../../eth-connect/eth-connect'
 
 import abi from './abi'
 import { Erc721 } from './erc721'
 
 /** Return Contract, Provider and RequestManager */
-export async function getContract(contractAddress: Address) {
+export async function getContract(contractAddress: eth.Address) {
   const provider = await getProvider()
-  const requestManager = new RequestManager(provider)
-  const factory = new ContractFactory(requestManager, abi)
+  const requestManager = new ethEsm.RequestManager(provider)
+  const factory = new ethEsm.ContractFactory(requestManager, abi)
   const contract = (await factory.at(contractAddress)) as Erc721
   return { contract, provider, requestManager }
 }
 
 export async function transfer(
-  contractAddress: Address,
-  toAddress: Address,
+  contractAddress: eth.Address,
+  toAddress: eth.Address,
   tokenId: number
 ) {
   const { contract } = await getContract(contractAddress)
@@ -30,8 +31,8 @@ export async function transfer(
 }
 
 export async function setApprovalForAll(
-  contractAddress: Address,
-  operator: Address,
+  contractAddress: eth.Address,
+  operator: eth.Address,
   approved: boolean = true
 ) {
   const { contract } = await getContract(contractAddress)
@@ -40,9 +41,9 @@ export async function setApprovalForAll(
 }
 
 export async function isApprovedForAll(
-  contractAddress: Address,
-  assetHolder: Address,
-  operator: Address
+  contractAddress: eth.Address,
+  assetHolder: eth.Address,
+  operator: eth.Address
 ) {
   const { contract } = await getContract(contractAddress)
   const res = await contract.isApprovedForAll(assetHolder, operator)

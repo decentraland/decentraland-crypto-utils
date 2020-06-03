@@ -1,9 +1,10 @@
-import { Address, toWei } from 'eth-connect'
+import * as eth from '../../../eth-connect/eth-connect'
+
 import { getUserAccount } from '@decentraland/EthereumController'
 import { getContract } from '../contract'
 
 export async function executeOrder(
-  nftAddress: Address,
+  nftAddress: eth.Address,
   assetId: number,
   price: number
 ) {
@@ -13,7 +14,7 @@ export async function executeOrder(
   const res = await contract.executeOrder(
     nftAddress,
     assetId,
-    toWei(price, 'ether').toString(),
+    eth.toWei(price, 'ether').toString(),
     {
       from: fromAddress
     }
