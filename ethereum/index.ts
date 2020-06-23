@@ -1,7 +1,14 @@
 import { getUserAccount } from '@decentraland/EthereumController'
-import { signMessage } from "./sign"
+import * as eth from '@decentraland/EthereumController'
 
-export {
-  signMessage,
-  getUserAccount
+/**
+ * Sign a message with your address
+ * 
+ * @param messageToSign String to sign
+ * @returns Initial message and its signature
+ */
+export async function signMessage(messageToSign: string) {
+  const convertedMessage = await eth.convertMessageToObject(messageToSign)
+  const { message, signature } = await eth.signMessage(convertedMessage)
+  return { message, signature }
 }

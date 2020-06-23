@@ -1,5 +1,5 @@
 import { TransactionObject, BlockType, EstimateGasOptions } from '../utils/types'
-import { Contract } from 'eth-connect/esm'
+import * as ethEsm from '../../eth-connect/esm'
 
 interface EventOptions {
   filter?: object
@@ -7,7 +7,7 @@ interface EventOptions {
   topics?: string[]
 }
 
-export class Erc20 extends Contract {
+export class Erc20 extends ethEsm.Contract {
   constructor(jsonInterface: any[], address?: string, options?: any)
   clone(): Erc20
   name(): TransactionObject<string>

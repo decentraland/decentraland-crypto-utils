@@ -1,16 +1,34 @@
 import * as eth from '../../../eth-connect/eth-connect'
 
-
 import * as ERC20 from 'src/erc20'
 import * as ERC721 from 'src/erc721'
 import { addresses } from 'src/utils/contract'
 import { getUserAccount } from '@decentraland/EthereumController'
 
+/**
+ * Check all the authorization for the marketplace
+ * 
+ * @param address User address
+ */
 export async function isAuthorizedAll(address?: eth.Address) {
   if (!address) address = await getUserAccount()
 
   const authorized: {
-    [key: string]: { [key: string]: { address: eth.Address; authorized: boolean } }
+    buying: { mana: { address: eth.Address; authorized: boolean } }
+    bidding: { mana: { address: eth.Address; authorized: boolean } }
+    selling: {
+      land: { address: eth.Address; authorized: boolean }
+      estates: { address: eth.Address; authorized: boolean }
+      exclusiveMasks: { address: eth.Address; authorized: boolean }
+      halloween: { address: eth.Address; authorized: boolean }
+      xmas: { address: eth.Address; authorized: boolean }
+      mch: { address: eth.Address; authorized: boolean }
+      communityContest: { address: eth.Address; authorized: boolean }
+      dclLaunch: { address: eth.Address; authorized: boolean }
+      dcg: { address: eth.Address; authorized: boolean }
+      staySafe: { address: eth.Address; authorized: boolean }
+      names: { address: eth.Address; authorized: boolean }
+    }
   } = {
     buying: {
       mana: { address: addresses.mainnet.MANAToken, authorized: false }
@@ -64,8 +82,21 @@ export async function isAuthorizedAll(address?: eth.Address) {
   )
 
   for (const contract in authorized.selling) {
-    authorized.selling[contract].authorized = await ERC721.isApprovedForAll(
-      authorized.selling[contract].address,
+    const con = contract as
+      | 'land'
+      | 'estates'
+      | 'exclusiveMasks'
+      | 'halloween'
+      | 'xmas'
+      | 'mch'
+      | 'communityContest'
+      | 'dclLaunch'
+      | 'dcg'
+      | 'staySafe'
+      | 'names'
+
+    authorized.selling[con].authorized = await ERC721.isApprovedForAll(
+      authorized.selling[con].address,
       address,
       '0x8e5660b4ab70168b5a6feea0e0315cb49c8cd539'
     )

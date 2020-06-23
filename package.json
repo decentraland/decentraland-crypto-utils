@@ -14,7 +14,7 @@
     "url": "git+https://github.com/decentraland/decentraland-crypto-utils.git"
   },
   "prettier": {
-    "printWidth": 80,
+    "printWidth": 100,
     "singleQuote": true,
     "semi": false
   },
