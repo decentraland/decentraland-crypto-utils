@@ -1,8 +1,9 @@
-import * as eth from '../../../eth-connect/eth-connect'
+import * as eth from 'eth-connect'
+import * as ethEsm from 'eth-connect/esm'
 
 import { getUserAccount } from '@decentraland/EthereumController'
 import { getContract } from '../contract'
-import { isApproved, setApproval } from 'src/erc20'
+import { isApproved, setApproval } from '../../erc20'
 
 /**
  * Execute an order on the market and buy the item
@@ -25,7 +26,7 @@ export async function executeOrder(
   const res = await contract.executeOrder(
     nftAddress,
     assetId,
-    eth.toWei(price, 'ether').toString(),
+    ethEsm.toWei(price, 'ether').toString(),
     {
       from: fromAddress
     }

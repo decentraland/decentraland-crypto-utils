@@ -1,8 +1,8 @@
-import * as eth from '../../../eth-connect/eth-connect'
+import * as eth from 'eth-connect'
 
-import * as ERC20 from 'src/erc20'
-import * as ERC721 from 'src/erc721'
-import { addresses } from 'src/utils/contract'
+import * as ERC20 from '../../erc20'
+import * as ERC721 from '../../erc721'
+import { addresses } from '../../utils/contract'
 import { getUserAccount } from '@decentraland/EthereumController'
 
 /**

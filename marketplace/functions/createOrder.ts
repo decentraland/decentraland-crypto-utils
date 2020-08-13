@@ -1,7 +1,9 @@
-import * as eth from '../../../eth-connect/eth-connect'
+import * as eth from 'eth-connect'
+import * as ethEsm from 'eth-connect/esm'
+
 import { getUserAccount } from '@decentraland/EthereumController'
 import { getContract } from '../contract'
-import { isApprovedForAll, setApprovalForAll } from 'src/erc721'
+import { isApprovedForAll, setApprovalForAll } from '../../erc721'
 
 /**
  * Create an order, price in MANA (1 = 1 MANA)
@@ -26,7 +28,7 @@ export async function createOrder(
   const res = await contract.createOrder(
     nftAddress,
     assetId,
-    eth.toWei(price, 'ether').toString(),
+    ethEsm.toWei(price, 'ether').toString(),
     expireAt,
     {
       from: fromAddress
