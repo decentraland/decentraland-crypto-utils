@@ -3,7 +3,7 @@ import {
   BlockType,
   EstimateGasOptions
 } from '../utils/types'
-import * as ethEsm from '../../eth-connect/esm'
+import * as ethEsm from 'eth-connect/esm'
 
 
 interface EventOptions {

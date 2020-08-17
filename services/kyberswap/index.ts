@@ -1,8 +1,8 @@
 import { getUserAccount } from '@decentraland/EthereumController'
 import { getProvider } from '@decentraland/web3-provider'
 
-import * as ethEsm from '../../../eth-connect/esm'
-import * as eth from '../../../eth-connect/eth-connect'
+import * as ethEsm from 'eth-connect/esm'
+import * as eth from 'eth-connect/eth-connect'
 
 
 import { CurrenciesData, MarketData, Currency } from './types/types'

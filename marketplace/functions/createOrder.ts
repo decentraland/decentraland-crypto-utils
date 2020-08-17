@@ -3,7 +3,7 @@ import * as ethEsm from 'eth-connect/esm'
 
 import { getUserAccount } from '@decentraland/EthereumController'
 import { getContract } from '../contract'
-import { isApprovedForAll, setApprovalForAll } from '../../erc721/index'
+import { isApprovedForAll, setApprovalForAll } from '../../nft/index'
 
 /**
  * Create an order, price in MANA (1 = 1 MANA)

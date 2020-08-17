@@ -1,8 +1,8 @@
 import { getProvider } from '@decentraland/web3-provider'
 import { getUserAccount } from '@decentraland/EthereumController'
-import * as ethEsm from '../../eth-connect/esm'
+import * as ethEsm from 'eth-connect/esm'
 
-import * as eth from '../../eth-connect/eth-connect'
+import * as eth from 'eth-connect/eth-connect'
 
 import abi from './abi'
 import { Erc20 } from './erc20'
@@ -39,16 +39,6 @@ export async function sendERC20(
 }
 
 /**
- * Send MANA to an address
- *
- * @param toAddress Receiver address
- * @param amount Amount in ether to send
- */
-export function sendMana(toAddress: eth.Address, amount: number) {
-  return sendERC20('0x0f5d2fb29fb7d3cfee444a200298f468908cc942', toAddress, amount * 1e18)
-}
-
-/**
  * Return true if the address is allowed to spend more than 1M token
  *
  * @param contractAddress Address of the token smartcontract
@@ -81,5 +71,36 @@ export async function setApproval(
   const { contract } = await getContract(contractAddress)
 
   const res = await contract.approve(spender, amount)
+  return res
+}
+
+/**
+ * Check how much the spender is allowed to move on behalf of the user
+ *
+ * @param contractAddress Address of the token smartcontract
+ * @param spender Address spending the token
+ * @param owner Address holding the token
+ */
+export async function allowance(
+  contractAddress: eth.Address,
+  owner: eth.Address,
+  spender: eth.Address
+) {
+  const { contract } = await getContract(contractAddress)
+
+  const res = await contract.allowance(owner, spender)
+  return res
+}
+
+/**
+ * Check the balance of an user
+ *
+ * @param contractAddress Address of the token smartcontract
+ * @param address Address you are checking
+ */
+export async function balance(contractAddress: eth.Address, address: eth.Address) {
+  const { contract } = await getContract(contractAddress)
+
+  const res = await contract.balanceOf(address)
   return res
 }

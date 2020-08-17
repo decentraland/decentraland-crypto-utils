@@ -1,5 +1,5 @@
 import { getUserAccount } from '@decentraland/EthereumController'
-import * as eth from '../../eth-connect/eth-connect'
+import * as eth from 'eth-connect/eth-connect'
 import { Profiles } from './types'
 
 /**
