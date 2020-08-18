@@ -1,7 +1,7 @@
 import { getProvider } from '@decentraland/web3-provider'
-import * as ethEsm from '../../eth-connect/esm'
+import * as ethEsm from 'eth-connect/esm'
 
-import * as eth from '../../eth-connect/eth-connect'
+import * as eth from 'eth-connect/eth-connect'
 
 import abi from './abi'
 import { Marketplace } from './marketplace'

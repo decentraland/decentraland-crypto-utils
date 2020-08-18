@@ -1,7 +1,7 @@
 import * as eth from 'eth-connect'
 
-import * as ERC20 from '../../erc20/index'
-import * as ERC721 from '../../erc721/index'
+import * as ERC20 from '../../currency/index'
+import * as ERC721 from '../../nft/index'
 import { addresses } from '../../utils/contract'
 import { getUserAccount } from '@decentraland/EthereumController'
 

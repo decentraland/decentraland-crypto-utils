@@ -1,8 +1,8 @@
 import { getProvider } from '@decentraland/web3-provider'
 import { getUserAccount } from '@decentraland/EthereumController'
-import * as ethEsm from '../../eth-connect/esm'
+import * as ethEsm from 'eth-connect/esm'
 
-import * as eth from '../../eth-connect/eth-connect'
+import * as eth from 'eth-connect/eth-connect'
 
 import abi from './abi'
 import { Erc721 } from './erc721'
