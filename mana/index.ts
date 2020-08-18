@@ -1,5 +1,5 @@
 import * as eth from 'eth-connect/eth-connect'
-import * as ethAsm from 'eth-connect/esm'
+import * as ethEsm from 'eth-connect/esm'
 import { getUserAccount } from '@decentraland/EthereumController'
 
 import * as ERC20 from '../currency/index'
@@ -11,7 +11,7 @@ import * as ERC20 from '../currency/index'
  * @param amount Amount in ether to send
  */
 export function send(toAddress: eth.Address, amount: number) {
-  return ERC20.sendERC20('0x0f5d2fb29fb7d3cfee444a200298f468908cc942', toAddress, +ethAsm.toWei(amount.toString(), 'ether').toString())
+  return ERC20.sendERC20('0x0f5d2fb29fb7d3cfee444a200298f468908cc942', toAddress, +ethEsm.toWei(amount.toString(), 'ether').toString())
 }
 
 /**
