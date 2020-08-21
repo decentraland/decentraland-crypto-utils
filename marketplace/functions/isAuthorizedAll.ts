@@ -2,7 +2,7 @@ import * as eth from 'eth-connect'
 
 import * as ERC20 from '../../currency/index'
 import * as ERC721 from '../../nft/index'
-import { addresses } from '../../utils/contract'
+import { mainnet as addresses } from '../../utils/contract'
 import { getUserAccount } from '@decentraland/EthereumController'
 
 /**
@@ -31,52 +31,52 @@ export async function isAuthorizedAll(address?: eth.Address) {
     }
   } = {
     buying: {
-      mana: { address: addresses.mainnet.MANAToken, authorized: false }
+      mana: { address: addresses.MANAToken, authorized: false }
     },
     bidding: {
-      mana: { address: addresses.mainnet.MANAToken, authorized: false }
+      mana: { address: addresses.MANAToken, authorized: false }
     },
     selling: {
-      land: { address: addresses.mainnet.LANDProxy, authorized: false },
-      estates: { address: addresses.mainnet.EstateProxy, authorized: false },
+      land: { address: addresses.LANDProxy, authorized: false },
+      estates: { address: addresses.EstateProxy, authorized: false },
       exclusiveMasks: {
-        address: addresses.mainnet.ExclusiveMasksCollection,
+        address: addresses.ExclusiveMasksCollection,
         authorized: false
       },
       halloween: {
-        address: addresses.mainnet.Halloween2019Collection,
+        address: addresses.Halloween2019Collection,
         authorized: false
       },
       xmas: {
-        address: addresses.mainnet.Xmas2019Collection,
+        address: addresses.Xmas2019Collection,
         authorized: false
       },
-      mch: { address: addresses.mainnet.MCHCollection, authorized: false },
+      mch: { address: addresses.MCHCollection, authorized: false },
       communityContest: {
-        address: addresses.mainnet.CommunityContestCollection,
+        address: addresses.CommunityContestCollection,
         authorized: false
       },
       dclLaunch: {
-        address: addresses.mainnet.DCLLaunchCollection,
+        address: addresses.DCLLaunchCollection,
         authorized: false
       },
-      dcg: { address: addresses.mainnet.DCGCollection, authorized: false },
+      dcg: { address: addresses.DCGCollection, authorized: false },
       staySafe: {
-        address: addresses.mainnet.StaySafeCollection,
+        address: addresses.StaySafeCollection,
         authorized: false
       },
-      names: { address: addresses.mainnet.DCLRegistrar, authorized: false }
+      names: { address: addresses.DCLRegistrar, authorized: false }
     }
   }
 
   authorized.buying.mana.authorized = await ERC20.isApproved(
-    addresses.mainnet.MANAToken,
+    addresses.MANAToken,
     address,
     '0x8e5660b4ab70168b5a6feea0e0315cb49c8cd539'
   )
 
   authorized.bidding.mana.authorized = await ERC20.isApproved(
-    addresses.mainnet.MANAToken,
+    addresses.MANAToken,
     address,
     '0xe479dfd9664c693b2e2992300930b00bfde08233'
   )
