@@ -3,7 +3,7 @@ import * as ethEsm from 'eth-connect/esm'
 
 import { getUserAccount } from '@decentraland/EthereumController'
 import { getContract } from '../contract'
-import { isApproved, setApproval } from '../../erc20/index'
+import { isApproved, setApproval } from '../../currency/index'
 
 /**
  * Execute an order on the market and buy the item
