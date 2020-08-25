@@ -4,9 +4,6 @@
   "description": "A collection of helpers to make it easier to build a Decentraland scene using the SDK.",
   "main": "index.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "make": "cp -r src dist && cp package.json dist/package.json && cp LICENSE dist/LICENSE && cp README.md dist/README.md",
-    "makeclean": "rm -rf dist && npm run make",
     "semantic-release": "semantic-release"
   },
   "repository": {
