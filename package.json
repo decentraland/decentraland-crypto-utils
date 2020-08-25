@@ -33,7 +33,7 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "decentraland-ecs": "^6.4.8",
+    "decentraland-ecs": "^6.4.10",
     "eth-connect": "^4.0.2"
   }
 }
