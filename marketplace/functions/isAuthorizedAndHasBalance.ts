@@ -5,8 +5,7 @@ import { toWei } from 'eth-connect'
 import { myBalance } from 'mana'
 
 export async function isAuthorizedAndHasBalance(price: string, userAddress?: string) {
-  if (!userAddress) userAddress = await getUserAccount()
-  const authorized = await allowance(Addresses.MANAToken, userAddress, Addresses.MarketplaceProxy)
+  const authorized = await allowance(Addresses.MANAToken, userAddress? userAddress: await getUserAccount(), Addresses.MarketplaceProxy)
   if (+authorized < +toWei(price, 'ether').toString()) return false
 
   const balance = await myBalance()
