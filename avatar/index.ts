@@ -1,4 +1,5 @@
 import { getUserAccount } from '@decentraland/EthereumController'
+import { getCurrentRealm } from '@decentraland/EnvironmentAPI'
 import * as eth from 'eth-connect/eth-connect'
 import { Profiles } from './types'
 
@@ -8,9 +9,11 @@ import { Profiles } from './types'
  * @param address ETH address
  */
 export async function getUserInfo(address?: eth.Address) {
+  const realm = address
+    ? 'https://peer.decentraland.org'
+    : await getCurrentRealm().then((r: any) => r.domain)
   if (!address) address = await getUserAccount()
-
-  return (await fetch(`https://peer.decentraland.org/content/entities/profiles?pointer=${address}`)
+  return (await fetch(`${realm}/content/entities/profiles?pointer=${address}`)
     .then(res => res.json())
     .then(res => (res.length ? res[0] : res))) as Profiles
 }
