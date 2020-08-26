@@ -27,7 +27,7 @@ export async function getContract(contractAddress: eth.Address) {
  * @param toAddress Receiver address
  * @param amount Amount in ether to send
  */
-export async function sendERC20(
+export async function send(
   contractAddress: eth.Address,
   toAddress: eth.Address,
   amount: number
