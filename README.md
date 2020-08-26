@@ -126,7 +126,6 @@ log(balance)
 
 Any currency token that adheres to the ERC20 standard can be handled by this library.
 
-getContract()
 
 ### Send
 
@@ -187,28 +186,142 @@ log(balance)
 
 ### Other functions
 
-getContract()
-...
+Call any functions that are available in a token's contract by instancing a `contract` object. When doing so, you must pass the token's address as a parameter.
+
+```ts
+import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
+import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+
+
+async function createContract(){
+	const contract = await currency.getContract(mainnet.MANAToken)
+	log(contract.contract.totalSupply() )
+}
+
+createContract()
+```
+
+The `getContract()` function also returns the `requestManager` object, which you can use to have greater control over the handling of the transaction.
+
+```ts
+const {contract, requestManager} = await currency.getContract(mainnet.MANAToken)
+```
 
 ## NFTs
 
+Any non-fungible token that adheres to the ERC721 standard can be handled by this library. Other tokens that don't adhere to the standard but that share common methods with it can also have those methods accessed through the functions in this library.
+
+
 ### Transfer an NFT
 
-transfer()
+To make players in your scene transfer an NFT to a specific address, use the `transfer()` function. This function requires the following arguments:
+
+- `contractAddress`: The address of the smart contract for the token to be sent
+- `toAddress`: What ethereum address to send the tokens to
+- `tokenId`: The id of the specific token to send within the smart contract
+
+
+```ts
+crypto.nft.transfer(Mainnet.Halloween2019Collection, `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`, 1)
+```
+
+For example, your scene can have a button that requires sending any wearable item to the scene cretor's personal wallet. The button opens a door, but only once a transaction is sent to transfer the token.
+
+```ts
+import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
+
+(...)
+
+let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
+
+button.addComponent(new OnPointerDown(async e => {
+	await nft.transfer(Mainnet.Halloween2019Collection, myWallet, 1).then(
+		// open door
+	)
+  }
+))
+```
+
+In this scenario, when players click on the button, they are prompted by Metamask to accept the transaction, transfering the NFT token plus paying an ETH gas fee dictated by the market at that time. Once that transaction is accepted on Metamask, the door opens.
+
+> Note: What's in the `.then()` argument that follows the `.send()` function gets called once the player approves the transaction in the Metamask window. The transaction at this point has no confirmations from the blockchain, so this function is currently vulnerable to a 0 gas fee exploit. If a player sets the gas price of the transaction to 0, or lower than the market fee, the transaction will never be carried out by the workers in the blockchain.
+
 
 ### Other functions
 
-getContract()
-...
+Call any functions that are available in a token's contract by instancing a `contract` object. When doing so, you must pass the token's address as a parameter.
+
+```ts
+import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
+import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+
+executeTask(async () => {
+	const contract = await nft.getContract(mainnet.Halloween2019Collection)
+	log(contract.contract.totalSupply() )
+})
+```
+
+The `getContract()` function also returns the `requestManager` object, which you can use to have greater control over the handling of the transaction.
+
+```ts
+const {contract, requestManager} = await currency.getContract(mainnet.MANAToken)
+```
+
 
 ## Signing Messages
+
+Request a player to use the private key of their Ethereum wallet to sign a message. 
+
+This is a valuable security measure to validate that the player who owns that wallet was truly there, since the signature of a private key can't be forged. Several smart contracts also require passing signed strings as parameters.
+
+```ts
+import * as ethereum from '../node_modules/@dcl/crypto-utils/ethereum/index'
+
+executeTask(async () => {
+	const message = await ethereum.signMessage('msg: this is a top secret message')
+	log(`MESSAGE: `, message)
+})
+```
+
+Whenever the `signMessage()` funcition is called, Metamask will open on the player's browser to request to accept signing the message.
+
+The `signMessage()` function returns an object that contains:
+
+- `message`: The original message that was signed, preceded by the string `# DCL Signed message↵msg:`
+- `signature`: The string generated from encrypting the original message through the player's private key
 
 
 ## The Marketplace
 
+This library exposes several functions that allow players to interact directly with the Decentraland marketplace from inside a scene.
+
+executeOrder()
+
+createOrder()
+
+cancelOrder()
+
+isAuthorizedAll()
+
+isAuthorizedAndHasBalance()
+
 
 ## Trading tokens with Kyberswap
 
+### Query token data
+
+getCurrencies()
+getACurrency()
+getMarketPair()
+
+### Query exchange data
+
+getQuote()
+getExpectedRate()
+
+### Carry out a transaction
+
+exchange()
 
 ## Third parties operating tokens
 
@@ -229,7 +342,7 @@ setApprovalForAll()
 
 ## Using Other contracts
 
-
+## Contract addresses reference
 
 ## Avatar
 
