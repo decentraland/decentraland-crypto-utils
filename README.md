@@ -44,18 +44,18 @@ npm i @dcl/crypto-utils@latest
 2. Import the library into the scene's script. Add this line at the start of your `game.ts` file, or any other TypeScript files that require it:
 
 ```ts
-import crypto from '../node_modules/@dcl/crypto-utils/index'
+import * as crypto from '../node_modules/@dcl/crypto-utils/index'
 
 ```
 
 If you'll only be using part of this library in your scene, we recommend instead only importing the specific relevant subfolder/s. For example:
 
 ```ts
-import mana from '../node_modules/@dcl/crypto-utils/mana/index'
-import currency from '../node_modules/@dcl/crypto-utils/currency/index'
-import nft from '../node_modules/@dcl/crypto-utils/nft/index'
-import marketplace from '../node_modules/@dcl/crypto-utils/marketplace/index'
-import wearable from '../node_modules/@dcl/crypto-utils/wearable/index'
+import * as mana from '../node_modules/@dcl/crypto-utils/mana/index'
+import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
+import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
+import * as marketplace from '../node_modules/@dcl/crypto-utils/marketplace/index'
+import * as wearable from '../node_modules/@dcl/crypto-utils/wearable/index'
 ```
 
 3. In your TypeScript file, write `crypto.` and let the suggestions of your IDE show the available helpers.
@@ -78,7 +78,7 @@ crypto.mana.send(`0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`, 100)
 For example, your scene can have a button that requests players to make a MANA payment to the scene cretor's personal wallet. The button opens a door, but only once a transaction is sent to pay the fee.
 
 ```ts
-import mana from '../node_modules/@dcl/crypto-utils/mana/index'
+import * as mana from '../node_modules/@dcl/crypto-utils/mana/index'
 
 (...)
 
@@ -114,7 +114,7 @@ Check the balance of any other wallet with `balance()`. This function just requi
 
 
 ```ts
-import mana from '../node_modules/@dcl/crypto-utils/mana/index'
+import * as mana from '../node_modules/@dcl/crypto-utils/mana/index'
 
 let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
 
@@ -145,7 +145,7 @@ crypto.currency.send('0x6B175474E89094C44Da98b954EedeAC495271d0F' , `0xeeeeeeeee
 For example, your scene can have a button that requests players to make a DAI payment to the scene cretor's personal wallet. The button opens a door, but only once a transaction is sent to pay the fee.
 
 ```ts
-import currency from '../node_modules/@dcl/crypto-utils/currency/index'
+import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
 
 (...)
 
@@ -176,7 +176,7 @@ Check the balance of any other wallet with `balance()`. This function requires t
 
 
 ```ts
-import currency from '../node_modules/@dcl/crypto-utils/currency/index'
+import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
 
 let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
 
