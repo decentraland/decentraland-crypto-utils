@@ -1,9 +1,9 @@
 import { getUserAccount } from '@decentraland/EthereumController'
 import { getProvider } from '@decentraland/web3-provider'
-
 import * as ethEsm from 'eth-connect/esm'
 import * as eth from 'eth-connect/eth-connect'
 
+import currencies from './currencies'
 
 import { CurrenciesData, MarketData, Currency } from './types/types'
 import abi from './abi'
@@ -20,7 +20,7 @@ async function getContract(contractAddress: eth.Address) {
 /**
  * Retrieves all the currencies on Kyberswap
  */
-export async function getCurrencies():Promise<CurrenciesData> {
+export async function getCurrencies(): Promise<CurrenciesData> {
   return (await fetch('https://kyberswap.com/api/currencies').then(r => r.json())) as CurrenciesData
 }
 
@@ -30,9 +30,11 @@ export async function getCurrencies():Promise<CurrenciesData> {
  * @param curr address, symbol or name of a currency
  */
 export async function getACurrency(curr: string): Promise<Currency | undefined> {
+  /* 
   const currencies = (await fetch('https://kyberswap.com/api/currencies').then(r =>
     r.json()
   )) as CurrenciesData
+   */
   for (const currency of currencies.data) {
     if (currency.symbol == curr) return currency
     if (currency.name == curr) return currency
@@ -45,16 +47,18 @@ export async function getACurrency(curr: string): Promise<Currency | undefined> 
  * Retrieves the trading pairs on Kyberswap
  */
 export async function getMarketPair() {
-  return (await fetch('https://api.kyber.network/pairs/market').then(r => r.json())) as MarketData
+  return (await fetch('https://api.kyber.network/pairs/market', { headers: {} }).then(r =>
+    r.json()
+  )) as MarketData
 }
 
 /**
  * Retrieves the estimated amount to be exchanged
- * 
+ *
  * @param src Token address of the source
  * @param dest Token address of the destination
  * @param srcAmount Amount in ether
- * 
+ *
  * @example
  * This example returns the estimated amount of MANA for 1 ETH
  * ```ts
@@ -69,7 +73,7 @@ export async function getQuote(src: string, dest: string, srcAmount: string) {
 
 /**
  * Retrieves estimated price and slippage
- * 
+ *
  * @param src Token address of the source
  * @param dest Token address of the destination
  * @param srcAmount Amount in ether
@@ -87,7 +91,7 @@ export async function getExpectedRate(src: string, dest: string, srcAmount: stri
 
 /**
  * Execute the transaction to exchange the tokens
- * 
+ *
  * @param srcToken Token symbol of the currency to send
  * @param destToken Token symbol of the currency to receive
  * @param srcAmount Amount in ether (ie: 1 = 1 MANA or 1 ETH)
