@@ -9,7 +9,7 @@ import { CurrenciesData, MarketData, Currency } from './types/types'
 import abi from './abi'
 import { Kyberswap } from './kyberswap'
 
-async function getContract(contractAddress: eth.Address) {
+export async function getContract(contractAddress: eth.Address) {
   const provider = await getProvider()
   const requestManager = new ethEsm.RequestManager(provider)
   const factory = new ethEsm.ContractFactory(requestManager, abi)
