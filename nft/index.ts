@@ -12,7 +12,7 @@ import { Erc721 } from './erc721'
  *
  * @param contractAddress Smartcontract ETH address
  */
-async function getContract(contractAddress: eth.Address) {
+export async function getContract(contractAddress: eth.Address) {
   const provider = await getProvider()
   const requestManager = new ethEsm.RequestManager(provider)
   const factory = new ethEsm.ContractFactory(requestManager, abi)
