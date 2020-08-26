@@ -38,34 +38,35 @@ To use any of the helpers provided by the utils library
 1. Install it as an `npm` package. Run this command in your scene's project folder:
 
 ```
-npm install https://github.com/HPrivakos/decentraland-crypto-utils.git
+npm i @dcl/crypto-utils@latest
 ```
 
 2. Import the library into the scene's script. Add this line at the start of your `game.ts` file, or any other TypeScript files that require it:
 
 ```ts
-import crypto from '../node_modules/decentraland-crypto-utils/index'
+import * as crypto from '../node_modules/@dcl/crypto-utils/index'
 
 ```
 
 If you'll only be using part of this library in your scene, we recommend instead only importing the specific relevant subfolder/s. For example:
 
 ```ts
-import mana from '../node_modules/decentraland-crypto-utils/mana/index'
-import currency from '../node_modules/decentraland-crypto-utils/currency/index'
-import nft from '../node_modules/decentraland-crypto-utils/nft/index'
-import marketplace from '../node_modules/decentraland-crypto-utils/marketplace/index'
-import wearable from '../node_modules/decentraland-crypto-utils/wearable/index'
+import * as mana from '../node_modules/@dcl/crypto-utils/mana/index'
+import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
+import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
+import * as marketplace from '../node_modules/@dcl/crypto-utils/marketplace/index'
+import * as wearable from '../node_modules/@dcl/crypto-utils/wearable/index'
 ```
 
 3. In your TypeScript file, write `crypto.` and let the suggestions of your IDE show the available helpers.
 
 ## MANA Operations
 
+As MANA is Decentraland's main currency, this library provies tools to make it especially easy to use in a scene.
 
 ### Send MANA to an address
 
-To send MANA to a predefined address, use the `send()` function. This function requires the following arguments:
+To make players in your scene send MANA to a specific address, use the `send()` function. This function requires the following arguments:
 
 - `toAddress`: What ethereum address to send the MANA to
 - `amount`: How many MANA tokens to send
@@ -74,48 +75,274 @@ To send MANA to a predefined address, use the `send()` function. This function r
 crypto.mana.send(`0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`, 100)
 ```
 
-For example, you could have a button that requests players to make a MANA payment to the scene cretor's personal wallet. The button could open a door, but only once the transaction is sent to pay the fee.
+For example, your scene can have a button that requests players to make a MANA payment to the scene cretor's personal wallet. The button opens a door, but only once a transaction is sent to pay the fee.
 
 ```ts
-button.addComponent(new OnPointerDown(e => {
-	crypto.mana.send(`0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`, 100).then(
+import * as mana from '../node_modules/@dcl/crypto-utils/mana/index'
+
+(...)
+
+let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
+
+button.addComponent(new OnPointerDown(async e => {
+	await mana.send(myWallet, 100).then(
 		// open door
 	)
   }
 ))
 ```
 
-In this scenario, when players click on the button, they would be prompted by Metamask to accept the transaction, paying the required MANA sum plus an ETH gas fee dictated by the market at that time . Once that transaction is accepted on Metamask, the door will open.
+In this scenario, when players click on the button, they are prompted by Metamask to accept the transaction, paying the required MANA sum plus an ETH gas fee dictated by the market at that time . Once that transaction is accepted on Metamask, the door opens.
 
-> Note: What's in the `.then()` argument gets called once the transaction is 
-
-
+> Note: What's in the `.then()` argument that follows the `.send()` function gets called once the player approves the transaction in the Metamask window. The transaction at this point has no confirmations from the blockchain, so this function is currently vulnerable to a 0 gas fee exploit. If a player sets the gas price of the transaction to 0, or lower than the market fee, the transaction will never be carried out by the workers in the blockchain.
 
 
 ### Get a player's MANA Balance
 
-crypto.mana.myBalance()
+Look up how much MANA a player has in their wallet. This is useful to know in advance if a player will be able to pay a fee or buy something from the Marketplace.
 
-crypto.mana.balance()
+Check the current player's balance with `myBalance()`. This function doesn't require any arguments.
 
+```ts
+import mana from '../node_modules/@dcl/crypto-utils/mana/index'
+
+let balance = await mana.myBalance()
+log(balance)
+```
+
+Check the balance of any other wallet with `balance()`. This function just requires the wallet address to check, as a string.
+
+
+```ts
+import * as mana from '../node_modules/@dcl/crypto-utils/mana/index'
+
+let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
+
+let balance = await mana.balance(myWallet)
+log(balance)
+```
 
 ## Other Currencies
 
+Any currency token that adheres to the ERC20 standard can be handled by this library.
 
 
+### Send
 
-## nfts
+
+To make players in your scene send a currency token to a specific address, use the `send()` function. This function requires the following arguments:
+
+- `contractAddress`: The address of the smart contract for the token to be sent
+- `toAddress`: What ethereum address to send the tokens to
+- `amount`: How many tokens to send
+
+
+```ts
+crypto.currency.send('0x6B175474E89094C44Da98b954EedeAC495271d0F' , `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`, 100)
+```
+
+For example, your scene can have a button that requests players to make a DAI payment to the scene cretor's personal wallet. The button opens a door, but only once a transaction is sent to pay the fee.
+
+```ts
+import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
+
+(...)
+
+let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
+
+button.addComponent(new OnPointerDown(async e => {
+	await currency.send('0x6B175474E89094C44Da98b954EedeAC495271d0F', myWallet, 1).then(
+		// open door
+	)
+  }
+))
+```
+
+In this scenario, when players click on the button, they are prompted by Metamask to accept the transaction, paying the required DAI sum plus an ETH gas fee dictated by the market at that time. Once that transaction is accepted on Metamask, the door opens.
+
+> Note: What's in the `.then()` argument that follows the `.send()` function gets called once the player approves the transaction in the Metamask window. The transaction at this point has no confirmations from the blockchain, so this function is currently vulnerable to a 0 gas fee exploit. If a player sets the gas price of the transaction to 0, or lower than the market fee, the transaction will never be carried out by the workers in the blockchain.
+
+
+### Check balance
+
+
+Look up how much of a coin a player has in their wallet. This is useful to know in advance if a player will be able to pay a fee or buy something in the scene.
+
+Check the balance of any other wallet with `balance()`. This function requires the following arguments:
+
+- `contractAddress`: Addess of the token's smart contract.
+- `address`: Wallet address that you want to check the balance of.
+
+
+```ts
+import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
+
+let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
+
+let balance = await mana.balance('0x6B175474E89094C44Da98b954EedeAC495271d0F', myWallet)
+log(balance)
+```
+
+
+### Other functions
+
+Call any functions that are available in a token's contract by instancing a `contract` object. When doing so, you must pass the token's address as a parameter.
+
+```ts
+import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
+import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+
+
+async function createContract(){
+	const contract = await currency.getContract(mainnet.MANAToken)
+	log(contract.contract.totalSupply() )
+}
+
+createContract()
+```
+
+The `getContract()` function also returns the `requestManager` object, which you can use to have greater control over the handling of the transaction.
+
+```ts
+const {contract, requestManager} = await currency.getContract(mainnet.MANAToken)
+```
+
+## NFTs
+
+Any non-fungible token that adheres to the ERC721 standard can be handled by this library. Other tokens that don't adhere to the standard but that share common methods with it can also have those methods accessed through the functions in this library.
+
+
+### Transfer an NFT
+
+To make players in your scene transfer an NFT to a specific address, use the `transfer()` function. This function requires the following arguments:
+
+- `contractAddress`: The address of the smart contract for the token to be sent
+- `toAddress`: What ethereum address to send the tokens to
+- `tokenId`: The id of the specific token to send within the smart contract
+
+
+```ts
+crypto.nft.transfer(Mainnet.Halloween2019Collection, `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`, 1)
+```
+
+For example, your scene can have a button that requires sending any wearable item to the scene cretor's personal wallet. The button opens a door, but only once a transaction is sent to transfer the token.
+
+```ts
+import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
+
+(...)
+
+let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
+
+button.addComponent(new OnPointerDown(async e => {
+	await nft.transfer(Mainnet.Halloween2019Collection, myWallet, 1).then(
+		// open door
+	)
+  }
+))
+```
+
+In this scenario, when players click on the button, they are prompted by Metamask to accept the transaction, transfering the NFT token plus paying an ETH gas fee dictated by the market at that time. Once that transaction is accepted on Metamask, the door opens.
+
+> Note: What's in the `.then()` argument that follows the `.send()` function gets called once the player approves the transaction in the Metamask window. The transaction at this point has no confirmations from the blockchain, so this function is currently vulnerable to a 0 gas fee exploit. If a player sets the gas price of the transaction to 0, or lower than the market fee, the transaction will never be carried out by the workers in the blockchain.
+
+
+### Other functions
+
+Call any functions that are available in a token's contract by instancing a `contract` object. When doing so, you must pass the token's address as a parameter.
+
+```ts
+import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
+import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+
+executeTask(async () => {
+	const contract = await nft.getContract(mainnet.Halloween2019Collection)
+	log(contract.contract.totalSupply() )
+})
+```
+
+The `getContract()` function also returns the `requestManager` object, which you can use to have greater control over the handling of the transaction.
+
+```ts
+const {contract, requestManager} = await currency.getContract(mainnet.MANAToken)
+```
+
+
+## Signing Messages
+
+Request a player to use the private key of their Ethereum wallet to sign a message. 
+
+This is a valuable security measure to validate that the player who owns that wallet was truly there, since the signature of a private key can't be forged. Several smart contracts also require passing signed strings as parameters.
+
+```ts
+import * as ethereum from '../node_modules/@dcl/crypto-utils/ethereum/index'
+
+executeTask(async () => {
+	const message = await ethereum.signMessage('msg: this is a top secret message')
+	log(`MESSAGE: `, message)
+})
+```
+
+Whenever the `signMessage()` funcition is called, Metamask will open on the player's browser to request to accept signing the message.
+
+The `signMessage()` function returns an object that contains:
+
+- `message`: The original message that was signed, preceded by the string `# DCL Signed message↵msg:`
+- `signature`: The string generated from encrypting the original message through the player's private key
 
 
 ## The Marketplace
 
+This library exposes several functions that allow players to interact directly with the Decentraland marketplace from inside a scene.
+
+executeOrder()
+
+createOrder()
+
+cancelOrder()
+
+isAuthorizedAll()
+
+isAuthorizedAndHasBalance()
+
 
 ## Trading tokens with Kyberswap
 
+### Query token data
 
-## Calling Other contracts
+getCurrencies()
+getACurrency()
+getMarketPair()
+
+### Query exchange data
+
+getQuote()
+getExpectedRate()
+
+### Carry out a transaction
+
+exchange()
+
+## Third parties operating tokens
+
+### Currencies
 
 
+setApproval()
+
+isApproved()
+
+allowance()
+
+### NFTs
+
+isApprovedForAll()
+setApprovalForAll()
+
+
+## Using Other contracts
+
+## Contract addresses reference
 
 ## Avatar
 
