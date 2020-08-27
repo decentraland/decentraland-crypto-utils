@@ -69,8 +69,10 @@ export async function setApproval(
   amount: string = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
 ) {
   const { contract } = await getContract(contractAddress)
-
-  const res = await contract.approve(spender, amount)
+  const fromAddress = await getUserAccount()
+  const res = await contract.approve(spender, amount, {
+	from: fromAddress
+  })
   return res
 }
 
