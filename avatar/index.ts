@@ -12,8 +12,8 @@ export async function getUserInfo(address?: eth.Address) {
   const realm = address
     ? 'https://peer.decentraland.org'
     : await getCurrentRealm().then((r: any) => r.domain)
-  if (!address) address = await getUserAccount()
-  return (await fetch(`${realm}/content/entities/profiles?pointer=${address}`)
+  if (!address) address = await getUserAccount().then(a => a.toLowerCase())
+  return (await fetch(`${realm}/content/entities/profiles?pointer=${address?.toLowerCase()}`)
     .then(res => res.json())
     .then(res => (res.length ? res[0] : res))) as Profiles
 }
