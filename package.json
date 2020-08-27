@@ -25,12 +25,11 @@
   "devDependencies": {
     "prettier": "^1.19.1",
     "semantic-release": "^16.0.1",
-    "typechain": "^2.0.0",
-    "typechain-target-web3-v1": "^1.0.4",
     "typescript": "^3.9.3"
   },
   "dependencies": {
     "decentraland-ecs": "^6.4.10",
+    "decentraland-ecs-utils": "^1.1.4",
     "eth-connect": "^4.0.2"
   },
   "publishConfig": {

@@ -6,6 +6,7 @@ import * as eth from 'eth-connect/eth-connect'
 
 import abi from './abi'
 import { Erc20 } from './erc20'
+import delay from '../utils/delay'
 
 /**
  * Return Contract, Provider and RequestManager
@@ -26,16 +27,25 @@ export async function getContract(contractAddress: eth.Address) {
  * @param contractAddress Smartcontract ETH address
  * @param toAddress Receiver address
  * @param amount Amount in ether to send
+ * @param waitConfirm Resolve promise when tx is mined or not
  */
 export async function send(
   contractAddress: eth.Address,
   toAddress: eth.Address,
-  amount: number
+  amount: number,
+  waitConfirm: boolean = false
 ) {
-  const { contract } = await getContract(contractAddress)
+  const { contract, requestManager } = await getContract(contractAddress)
   const fromAddress = await getUserAccount()
   const res = await contract.transfer(toAddress, amount, { from: fromAddress })
-  return res
+  let receipt = null
+  if (waitConfirm) {
+    while (receipt == null) {
+      await delay(2000)
+      receipt = await requestManager.eth_getTransactionReceipt(res.toString())
+    }
+    return receipt
+  } else return res
 }
 
 /**
@@ -61,17 +71,26 @@ export async function isApproved(
  *
  * @param contractAddress Address of the token smartcontract
  * @param spender Address spending the token
+ * @param waitConfirm Resolve promise when tx is mined or not
  * @param amount Amount to approve
  */
 export async function setApproval(
   contractAddress: eth.Address,
   spender: eth.Address,
-  amount: string = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+  waitConfirm: boolean = false,
+  amount: string = '0x0000000000000000001000000000000000000000000000000000000000000000'
 ) {
-  const { contract } = await getContract(contractAddress)
+  const { contract, requestManager } = await getContract(contractAddress)
 
   const res = await contract.approve(spender, amount)
-  return res
+  let receipt = null
+  if (waitConfirm) {
+    while (receipt == null) {
+      await delay(2000)
+      receipt = await requestManager.eth_getTransactionReceipt(res.toString())
+    }
+    return receipt
+  } else return res
 }
 
 /**

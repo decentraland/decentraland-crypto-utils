@@ -6,6 +6,7 @@ import * as eth from 'eth-connect/eth-connect'
 
 import abi from './abi'
 import { Erc721 } from './erc721'
+import delay from '../utils/delay'
 
 /**
  * Return Contract, Provider and RequestManager
@@ -26,19 +27,28 @@ export async function getContract(contractAddress: eth.Address) {
  * @param contractAddress ERC721 smartcontract address
  * @param toAddress Receiver address
  * @param tokenId Token ID
+ * @param waitConfirm Resolve promise when tx is mined or not
  */
 export async function transfer(
   contractAddress: eth.Address,
   toAddress: eth.Address,
-  tokenId: number
+  tokenId: number,
+  waitConfirm: boolean = false
 ) {
-  const { contract } = await getContract(contractAddress)
+  const { contract, requestManager } = await getContract(contractAddress)
   const fromAddress = await getUserAccount()
 
   const res = await contract.transferFrom(fromAddress, toAddress, tokenId, {
     from: fromAddress
   })
-  return res
+  let receipt = null
+  if (waitConfirm) {
+    while (receipt == null) {
+      await delay(2000)
+      receipt = await requestManager.eth_getTransactionReceipt(res.toString())
+    }
+    return receipt
+  } else return res
 }
 
 /**
