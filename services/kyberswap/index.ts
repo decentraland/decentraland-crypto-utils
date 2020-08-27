@@ -21,7 +21,7 @@ export async function getContract(contractAddress: eth.Address) {
  * Retrieves all the currencies on Kyberswap
  */
 export async function getCurrencies(): Promise<CurrenciesData> {
-  return (await fetch('https://kyberswap.com/api/currencies').then(r => r.json())) as CurrenciesData
+  return currencies //(await fetch('https://kyberswap.com/api/currencies').then(r => r.json())) as CurrenciesData
 }
 
 /**
