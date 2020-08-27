@@ -60,6 +60,7 @@ import * as wearable from '../node_modules/@dcl/crypto-utils/wearable/index'
 
 3. In your TypeScript file, write `crypto.` and let the suggestions of your IDE show the available helpers.
 
+
 ## MANA Operations
 
 As MANA is Decentraland's main currency, this library provies tools to make it especially easy to use in a scene.
@@ -192,13 +193,10 @@ Call any functions that are available in a token's contract by instancing a `con
 import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
 import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
 
-
-async function createContract(){
+executeTask(async () => {
 	const contract = await currency.getContract(mainnet.MANAToken)
 	log(contract.contract.totalSupply() )
-}
-
-createContract()
+})
 ```
 
 The `getContract()` function also returns the `requestManager` object, which you can use to have greater control over the handling of the transaction.
@@ -293,6 +291,19 @@ The `signMessage()` function returns an object that contains:
 - `signature`: The string generated from encrypting the original message through the player's private key
 
 
+## Decentraland contracts
+
+This library includes an enum list of all official Decentraland-released smart contracts, to easily refer to them when using the different functions.
+
+A separate list exists for contracts on `mainnet`, `ropsten`, `kovan` and `rinkeby` networks.
+
+```ts
+import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+
+log(mainnet.MANAToken)
+```
+
+
 ## The Marketplace
 
 This library exposes several functions that allow players to interact directly with the Decentraland marketplace from inside a scene.
@@ -342,26 +353,46 @@ isApprovedForAll()
 setApprovalForAll()
 
 
-## Using Other contracts
+## Call functions from any contract
 
-## Contract addresses reference
+Call any functions that are available in any smart contract by instancing a `contract` object. When doing so, you must pass:
 
+- `contractAdress`:  The token's Ethereum smart contract address.
+- `abi`: The ABI definition for the contract, where all of its functions and parameters are listed
+
+```ts
+import {getContract } from '../node_modules/@dcl/crypto-utils/utils/contract'
+
+
+executeTask(async () => {
+	const contract = await getContract('0xF87E31492Faf9A91B02Ee0dEAAd50d51d56D5d4d', LANDAbi)
+})
+```
+
+The `getContract()` function also returns the `requestManager` object, which you can use to have greater control over the handling of the transaction.
+
+```ts
+const {contract, requestManager} = await currency.getContract(mainnet.MANAToken)
+```
+
+You can obtain the ABI of a contract on etherscan. For example, if you go to the Etherscan page for the [LAND contract](https://etherscan.io/address/0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d#code), you can find the ABI by picking the *Contract* tab in the bottom section and then scrolling down. You can export the ABI to JSON, and add that as a file in your scene's project, or paste its contents into a *.ts* file in your scene's project.
+ 
 ## Avatar
 
 ### Get user information
 
-To get information about an user, use the `getUserInfo` function.
+To get information about an user, use the `getUserInfo()` function.
 
 `getUserInfo` has one optional argument:
 
-- `address`: `string` which is the ETH address of an user
+- `address`: `string` which is the ETH address of a user
 
-If an address is not specified, the function will use the address of the user
+If an address is not specified, the function will use the address of the current user running the scene.
 
-This example retrieves to data of an address and print the username in the console:
+This example retrieves the data of an address and prints the username in console:
 
 ```ts
-import avatar from '../node_modules/decentraland-crypto-utils/avatar/index'
+import * as avatar from '../node_modules/@dcl/crypto-utils/avatar/index'
 
 avatar
   .getUserInfo('0x521b0fef9cdcf250abaf8e7bc798cbe13fa98692')
@@ -370,20 +401,29 @@ avatar
   })
 ```
 
+The `getUserData()` function returns the following information:
+
+- `displayName`: _(string)_ The player's user name, as others see in-world
+- `userId`: _(string)_ A UUID string that identifies the player. If the player has a public key, this field will have the same value as the public key.
+- `publicKey`: _(string)_ The public key of the player's Ethereum wallet. If the player has no linked wallet, this field will be `null`.
+- `hasConnectedWeb3`: _(boolean)_ Indicates if the player has a public key. _True_ if the player has one.
+
+> Note: For any Ethereum transactions with the player, always use the `publicKey` field, instead of the `userId`.
+
 ### Get user inventory
 
-To get information about an user, use the `getUserInventory` function.
+To fetch the full inventory of wearable items owned by a player, use the `getUserInventory()` function.
 
 `getUserInventory` has one optional argument:
 
 - `address`: `string` which is the ETH address of an user
 
-If an address is not specified, the function will use the address of the user
+If an address is not specified, the function will use the address of the current user running the scene.
 
-This example retrieves to data of an address and print a list of items in the console:
+This example retrieves the inventory of an address and print a list of items in the console:
 
 ```ts
-import avatar from '../node_modules/decentraland-crypto-utils/avatar/index'
+import * as avatar from '../node_modules/@dcl/crypto-utils/avatar/index'
 
 avatar
   .getUserInventory('0x521b0fef9cdcf250abaf8e7bc798cbe13fa98692')
@@ -392,21 +432,21 @@ avatar
   })
 ```
 
-### Do user has an item
+### Check if a player has an item
 
-To check the inventory of an user, use the `itemInInventory` function.
+To check if an item is in the inventory of a player, use the `itemInInventory` function.
 
 `itemInInventory` has one required argument:
 
 - `wearable`: `string` which is the name of a wearable (e.g.: `dcl://dcl_launch/razor_blade_upper_body`)
 
 and one optional argument:
-- `equiped`: `boolean` if true, the item has to be equiped (default: false)
+- `equiped`: `boolean` if true, the player must have the item currently equipped (default: false)
 
-This example check if the user has the Razor Blade Jacket equiped:
+This example checks if the player has the *Razor Blade Jacket* wearable equiped:
 
 ```ts
-import avatar from '../node_modules/decentraland-crypto-utils/avatar/index'
+import * as avatar from '../node_modules/@dcl/crypto-utils/avatar/index'
 
 avatar
   .itemInInventory('dcl://dcl_launch/razor_blade_upper_body', true)
@@ -416,21 +456,21 @@ avatar
   })
 ```
 
-### Do user has one of those items
+### Check if a player has one of several items
 
-To check the inventory of an user, use the `itemsInInventory` function.
+To check if several items are in the inventory of a player, use the `itemsInInventory` function.
 
 `itemsInInventory` has one required argument:
 
 - `wearables`: `string` which is the name of a wearable (e.g.: `dcl://dcl_launch/razor_blade_upper_body`)
 
 and one optional argument:
-- `equiped`: `boolean` if true, the item has to be equiped (default: false)
+- `equiped`: `boolean` if true, the player must have the item currently equipped (default: false)
 
-This example check if the user has the Razor Blade Jacket equiped:
+This example checks if the player has the Razor Blade Jacket equiped:
 
 ```ts
-import avatar from '../node_modules/decentraland-crypto-utils/avatar/index'
+import * as avatar from '../node_modules/@dcl/crypto-utils/avatar/index'
 
 avatar
   .itemInInventory('dcl://dcl_launch/razor_blade_upper_body', true)
