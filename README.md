@@ -308,17 +308,177 @@ log(mainnet.MANAToken)
 
 This library exposes several functions that allow players to interact directly with the Decentraland marketplace from inside a scene.
 
-executeOrder()
-
-createOrder()
-
-cancelOrder()
-
-isAuthorizedAll()
-
-isAuthorizedAndHasBalance()
 
 
+### Buy an item from the marketplace
+
+A player can buy an item that's on sale on the Decentraland marketplace without leaving a Decentraland scene, using the `executeOrder()` function.
+
+This function takes three arguments:
+- `nftAddress`: _string_ The address of the smart contract for the token being sold. For example if this is a Decentraland wearable, it would be the address of the collection that the wearable belongs to.
+- `assetId`: _number_ The id of the specific token being traded, within its contract.
+- `price`: _number_ The price being paid for the item, in MANA. This number is expressed in full MANA units, not in Wei.
+
+> TIP: If you navigate the Marketplace to a wearable that's on sale, you'll find both the `nftAddress` and `assetId` are part of the URL. For example, in the url _https://market.decentraland.org/contracts/0xd35147be6401dcb20811f2104c33de8e97ed6818/tokens/28706_, the `nftAddress` is _0xd35147be6401dcb20811f2104c33de8e97ed6818_ and the `assetId` is _28706_. You can obtain all the required data about wearables on sale by querying the Marketplace API.
+
+> NOTE: The item needs to be currently published on sale in the Decentraland marketplace.
+
+
+```ts
+import * as marketplace from '../node_modules/@dcl/crypto-utils/marketplace/index'
+
+
+executeTask(async () => {
+	await crypto.marketplace.executeOrder(
+        	`0xd35147be6401dcb20811f2104c33de8e97ed6818`,
+       		`28706`,
+        	30
+      	)
+}
+```
+
+To buy the item, the player must give the Decentraland Marketplace permissions to operate with MANA on their behalf. If the player doesn't have these permissions set, the `executeOrder()` will ask for two transactions: one to set these permissions and one to do buy the item. 
+
+> TIP: You can check to see if your wallet has these permissions set by going to the [Marketplace settings page](https://market.decentraland.org/settings) and seeing if this checkbox is checked: **Authorize the Marketplace contract to operate MANA on your behalf**
+
+
+### Check the player's authorizations
+
+Before a player can buy on the Decentraland Marketplace, they need to give the Marketplace contract permissions to operate with MANA on their behalf. Before a player posts a new order to sell an item, they also need to give the Marketplace permissions to handle items of the contract that items belongs to.
+
+If a player tries to run the `executeOrder()` function without the necessary permissions, the function will handle adding those permissions first.
+
+To check if a player has the necessary permissions to buy with the Marketplace and has enough MANA in their balance, use `isAuthorizedAndHasBalance()`. This function requires one field:
+
+- `price`: _string_ How much MANA the player should have in their balance. This number is expressed in full MANA units, not in Wei.
+
+```ts
+import * as marketplace from '../node_modules/@dcl/crypto-utils/marketplace/index'
+
+
+executeTask(async () => {
+	let permissions = await marketplace.isAuthorizedAndHasBalance(1000)
+	log(permissions)
+})
+```
+
+This function returns _true_ only if the player has MANA authorized for the Marketplace, and holds enough MANA currently.
+
+To make the player approve MANA for spending in the Marketplace, you can use the `setApproval()` function of the `currency` section of this library, like so:
+
+```ts
+import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
+import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+
+executeTask(async () => {
+	await currency.setApproval(mainnet.MANAToken, mainnet.Marketplace)
+})
+```
+
+To check if a player has all of the possible permissions set up for the Marketplace, run the `isAuthorizedAll()` function. This function has one optional parameter
+
+- `address`: _string_ (optional) What player address to check for permissions. If no value is provided, it uses the current player running the scene.
+
+
+```ts
+import * as marketplace from '../node_modules/@dcl/crypto-utils/marketplace/index'
+
+
+executeTask(async () => {
+	let permissions = await marketplace.isAuthorizedAll()
+	log(permissions)
+})
+```
+
+This function returns an object with three main objects, `bidding`, `buying`, and `selling`. Each of these contains a field for each of the available contracts that might have permissions for that purpose, and for each of these contracts, there's an object containing the address and a boolean for the `authorized` status of that contract for that purpose.
+
+Below is an extract of part of what the response looks like:
+
+```
+{
+	bidding: {
+		mana: { address: "0x0f5d2fb29fb7d3cfee444a200298f468908cc942", authorized: true}
+	},
+	buying: {
+		mana: { address: "0x0f5d2fb29fb7d3cfee444a200298f468908cc942", authorized: true}
+	}.
+	selling: {
+		communityContest: { address: "0x32b7495895264ac9d0b12d32afd435453458b1c6", authorized: true},
+		(...)
+	}
+}	
+```
+
+If permissions are missing, they can be added with the `setApproval()` function from the `currency` or the `nft`section of the library, depending on the case.
+
+```ts
+import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
+import * as nft from '../node_modules/@dcl/crypto-utils/currency/index'
+import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+
+executeTask(async () => {
+	// Give permisions for MANA
+	await currency.setApproval(mainnet.MANAToken, mainnet.Marketplace)
+
+	// Give permissions for a specific wearable collection
+	await nft.setApproval(mainnet.Halloween2019Collection, mainnet.Marketplace)
+})
+```
+
+### Sell from a scene
+
+A player can put an item on sale on the Marketplace from within a Decentraland scene using the `createOrder()` function.
+
+
+This function takes three arguments:
+- `nftAddress`: _string_ The address of the smart contract for the token to sell. For example if this is a Decentraland wearable, it would be the address of the collection that the wearable belongs to.
+- `assetId`: _number_ The id of the specific token being traded, within its contract.
+- `price`: _number_ The price to set for the order, in MANA. This number is expressed in full MANA units, not in Wei.
+- `expireAt`: _number_ (optional) When to expire this offer, expressed as milliseconds since January 1, 1970, 00:00:00 UTC. If a value is not set, it defaults to one month from the present time.
+
+> TIP: If you navigate the Marketplace to a wearable that's on sale, you'll find both the `nftAddress` and `assetId` are part of the URL. For example, in the url _https://market.decentraland.org/contracts/0xd35147be6401dcb20811f2104c33de8e97ed6818/tokens/28706_, the `nftAddress` is _0xd35147be6401dcb20811f2104c33de8e97ed6818_ and the `assetId` is _28706_. You can obtain all the required data about wearables on sale by querying the Marketplace API.
+
+
+```ts
+import * as marketplace from '../node_modules/@dcl/crypto-utils/marketplace/index'
+
+
+executeTask(async () => {
+	await crypto.marketplace.createOrder(
+        	`0xd35147be6401dcb20811f2104c33de8e97ed6818`,
+       		`28706`,
+        	30
+      	)
+}
+```
+> NOTE: The player creating the order needs to own the token being put on sale. The player must also have permissions set to allow the Marketplace contract to operate with this specific token contract. If it's a wearable, the player must have granted permissions for that specific wearable collection.
+
+### Cancel the selling of a token
+
+A token that's on sale on the Marketplace can be taken off sale from within a scene, by using the `cancelOrder()` function.
+
+This function takes two arguments:
+- `nftAddress`: _string_ The address of the smart contract for the token to sell. For example if this is a Decentraland wearable, it would be the address of the collection that the wearable belongs to.
+- `assetId`: _number_ The id of the specific token being traded, within its contract.
+
+> TIP: If you navigate the Marketplace to a wearable that's on sale, you'll find both the `nftAddress` and `assetId` are part of the URL. For example, in the url _https://market.decentraland.org/contracts/0xd35147be6401dcb20811f2104c33de8e97ed6818/tokens/28706_, the `nftAddress` is _0xd35147be6401dcb20811f2104c33de8e97ed6818_ and the `assetId` is _28706_. You can obtain all the required data about wearables on sale by querying the Marketplace API.
+
+
+```ts
+import * as marketplace from '../node_modules/@dcl/crypto-utils/marketplace/index'
+
+
+executeTask(async () => {
+	await crypto.marketplace.cancelOrder(
+        	`0xd35147be6401dcb20811f2104c33de8e97ed6818`,
+       		`28706`
+      	)
+}
+```
+> NOTE: The player cancelling the order needs to be the creator of the order in the Marketplace and own the token being put on sale. The player must also have permissions set to allow the Marketplace contract to operate with this specific token contract. If it's a wearable, the player must have granted permissions for that specific wearable collection.
+
+
+<!--
 ## Trading tokens with Kyberswap
 
 ### Query token data
@@ -335,6 +495,7 @@ getExpectedRate()
 ### Carry out a transaction
 
 exchange()
+-->
 
 ## Third parties operating tokens
 
@@ -385,7 +546,7 @@ To get information about an user, use the `getUserInfo()` function.
 
 `getUserInfo` has one optional argument:
 
-- `address`: `string` which is the ETH address of a user
+- `address`: _string_ which is the ETH address of a user
 
 If an address is not specified, the function will use the address of the current user running the scene.
 
@@ -403,12 +564,17 @@ avatar
 
 The `getUserData()` function returns the following information:
 
-- `displayName`: _(string)_ The player's user name, as others see in-world
-- `userId`: _(string)_ A UUID string that identifies the player. If the player has a public key, this field will have the same value as the public key.
-- `publicKey`: _(string)_ The public key of the player's Ethereum wallet. If the player has no linked wallet, this field will be `null`.
-- `hasConnectedWeb3`: _(boolean)_ Indicates if the player has a public key. _True_ if the player has one.
+- `content`: An array containing four objects, each with the path to a different screenshot of the player: a full body image, and three versions of the face in full and in thumbnail resolution.
+- `metdta`: An object that includes: 
+	- `avatar`: All of the wearables and configurations on the avatar
+	- `inventory`: All of the wearables the player owns
+	- `ethAddress`: _(string)_ The public key of the player's Ethereum wallet. If the player has no linked wallet, this field will be `null`.
+	- `name`: The player's user name, as others see in-world
+	- `userId`: _(string)_ A UUID string that identifies the player. If the player has a public key, this field will have the same value as the public key.
+	the player's email and bio if present.
+- `timestamp`: A timestamp for the time this data was fetched.
 
-> Note: For any Ethereum transactions with the player, always use the `publicKey` field, instead of the `userId`.
+> Note: For any Ethereum transactions with the player, always use the `ethAddress` field, instead of the `userId`.
 
 ### Get user inventory
 
@@ -416,7 +582,7 @@ To fetch the full inventory of wearable items owned by a player, use the `getUse
 
 `getUserInventory` has one optional argument:
 
-- `address`: `string` which is the ETH address of an user
+- `address`: _string_ which is the ETH address of an user
 
 If an address is not specified, the function will use the address of the current user running the scene.
 
@@ -432,18 +598,23 @@ avatar
   })
 ```
 
+This function returns an array with the full names of each wearabe, for example: 
+
+```
+["dcl://halloween_2019/zombie_suit_mask", "dcl://community_contest/cw_tuxedo_tshirt_upper_body", "dcl://dcl_launch/mana_hoodie_upper_body"]
+```
+
 ### Check if a player has an item
 
 To check if an item is in the inventory of a player, use the `itemInInventory` function.
 
-`itemInInventory` has one required argument:
+`itemInInventory` has one required and one optional argument:
 
-- `wearable`: `string` which is the name of a wearable (e.g.: `dcl://dcl_launch/razor_blade_upper_body`)
+- `wearable`: _string_ which is the name of a wearable (e.g.: `dcl://dcl_launch/razor_blade_upper_body`)
 
-and one optional argument:
-- `equiped`: `boolean` if true, the player must have the item currently equipped (default: false)
+- `equiped`: _boolean_ (optional) if true, the player must have the item currently equipped (default: false)
 
-This example checks if the player has the *Razor Blade Jacket* wearable equiped:
+This example checks if the player has the *Razor Blade Jacket* wearable equiped. If so, the function returns _true_.
 
 ```ts
 import * as avatar from '../node_modules/@dcl/crypto-utils/avatar/index'
@@ -452,32 +623,76 @@ avatar
   .itemInInventory('dcl://dcl_launch/razor_blade_upper_body', true)
   .then(isItemEquiped => {
     if(isItemEquiped) log("The Razor Blade jacket is equiped")
-    else log("This item is not equiped equiped")
+    else log("This item is not equiped")
   })
 ```
+
+> Tip: You can find out the full name of a wearable by using `getListOfWearables()` to get a full list of all wearables supported by Decentraland, with all their information.
 
 ### Check if a player has one of several items
 
-To check if several items are in the inventory of a player, use the `itemsInInventory` function.
+To check if at least one of several items are in the inventory of a player, use the `itemsInInventory` function.
 
-`itemsInInventory` has one required argument:
+`itemsInInventory` has one required and one optional argument:
 
-- `wearables`: `string` which is the name of a wearable (e.g.: `dcl://dcl_launch/razor_blade_upper_body`)
+- `wearables`: _string[]_ An array with the string names of the wearables to look for (e.g.: `["dcl://dcl_launch/razor_blade_upper_body", "dcl://community_contest/cw_tuxedo_tshirt_upper_body"]`).
 
-and one optional argument:
-- `equiped`: `boolean` if true, the player must have the item currently equipped (default: false)
+- `equiped`: _boolean_ (optional) if true, the player must have one of the items currently equipped (default: false).
 
-This example checks if the player has the Razor Blade Jacket equiped:
+This example checks if the player has the Razor Blade Jacket equiped or the Tuxedo Shirt. If so, the function returns _true_.
 
 ```ts
 import * as avatar from '../node_modules/@dcl/crypto-utils/avatar/index'
 
 avatar
-  .itemInInventory('dcl://dcl_launch/razor_blade_upper_body', true)
+  .itemsInInventory(["dcl://dcl_launch/razor_blade_upper_body", "dcl://community_contest/cw_tuxedo_tshirt_upper_body"], true)
   .then(isItemEquiped => {
-    if(isItemEquiped) log("The Razor Blade jacket is equiped")
-    else log("This item is not equiped equiped")
+    if(isItemEquiped) log("One of the items is equiped")
+    else log("None of the items are equiped")
   })
 ```
+
+> Tip: You can find out the full name of a wearable by using `getListOfWearables()` to get a full list of all wearables supported by Decentraland, with all their information.
+
+### Get data of all wearables
+
+To fetch a full list of all wearables supported by Decentraland, including their full names, categories, contracts, etc, call the `getListOfWearables()`. This function doesn't take any arguments.
+
+```ts
+import * as wearable from '../node_modules/@dcl/crypto-utils/wearalbe/index'
+
+executeTask(async () => {
+	const allWearables = await wearable.getListOfWearables()
+	log(allWearables)
+})
+```
+
+This function returns an array of wearable collections, where each of these collections has a `wearables` field that contains a list of all wearables in that collection. Below is an extract of what this data looks like:
+
+```ts
+[ {id: "halloween_2019", wearables: [
+		{
+			baseUrl: "https://wearable-api.decentraland.org/v2/collections/halloween_2019/",
+			category: "earring",
+			description: "It may be someone else's head but that doesn't mean you can't look good",
+			hides: [],
+			i18n:0: [{code: "en", text: "Spider Earrings"}, {code: "es", text: "Pendientes de Araña"}],
+			id: "dcl://halloween_2019/bride_of_frankie_earring",
+			image: "QmZsnoehbtLDfk2FKbpDAk8nFatknSFQFqphF6RQu3Nkd7",
+			rarity: "mythic",
+			replaces: [],
+			representations: [{…}],
+			tags: (6) ["accesories", "exclusive", "earrings", "halloween", "spider", "exclusive"],
+			thumbnail: "QmSfe6dHYXAvsbMBTNGWwHtsr2aBoMjUrCW2TeLbCPw4oZ",
+			type: "wearable"
+		}, (...)
+	]
+  },
+  {id: "xmas_2019", wearables: [(...)]},
+  (...)	
+]
+```
+
+
 
 
