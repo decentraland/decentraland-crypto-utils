@@ -13,7 +13,7 @@ This library includes a number of helpful pre-built tools that help you deal wit
 	- [Transfer an NFT](#transfer-an-nft)
 	- [Other Functions](#other-functions-1)
 - [Sign Message](#Signing-Messages)
-- [Decentraland contracts](#Decentraland contracts)
+- [Decentraland contracts](#decentraland-contracts)
 - [Marketplace](#The-Marketplace)
 	- [Buy an item from the marketplace](#buy-an-item-from-the-marketplace)
 	- [Check the player's authorizations](#check-the-players-authorizations)
