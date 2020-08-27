@@ -63,7 +63,7 @@ import * as wearable from '../node_modules/@dcl/crypto-utils/wearable/index'
 
 ## MANA Operations
 
-As MANA is Decentraland's main currency, this library provies tools to make it especially easy to use in a scene.
+As MANA is Decentraland's main currency, this library provides tools to make it especially easy to use in a scene.
 
 ### Send MANA to an address
 
@@ -71,9 +71,10 @@ To make players in your scene send MANA to a specific address, use the `send()` 
 
 - `toAddress`: What ethereum address to send the MANA to
 - `amount`: How many MANA tokens to send
+- `waitConfirm`: _boolean_ (optional) If true, the function will not be completed till the transaction is mined and added to a block in the blockchain. If false (default value), the function will be completed as soon as the transaction is requested.
 
 ```ts
-crypto.mana.send(`0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`, 100)
+mana.send(`0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`, 100)
 ```
 
 For example, your scene can have a button that requests players to make a MANA payment to the scene cretor's personal wallet. The button opens a door, but only once a transaction is sent to pay the fee.
@@ -86,16 +87,18 @@ import * as mana from '../node_modules/@dcl/crypto-utils/mana/index'
 let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
 
 button.addComponent(new OnPointerDown(async e => {
-	await mana.send(myWallet, 100).then(
+	await mana.send(myWallet, 100, true).then(
 		// open door
 	)
   }
 ))
 ```
 
-In this scenario, when players click on the button, they are prompted by Metamask to accept the transaction, paying the required MANA sum plus an ETH gas fee dictated by the market at that time . Once that transaction is accepted on Metamask, the door opens.
+In this scenario, when players click on the button, they are prompted by Metamask to accept the transaction, paying the required MANA sum plus an ETH gas fee dictated by the market at that time. 
 
-> Note: What's in the `.then()` argument that follows the `.send()` function gets called once the player approves the transaction in the Metamask window. The transaction at this point has no confirmations from the blockchain, so this function is currently vulnerable to a 0 gas fee exploit. If a player sets the gas price of the transaction to 0, or lower than the market fee, the transaction will never be carried out by the workers in the blockchain.
+What's executed after the `.send()` function ( in the `.then()` statement in this case ) only gets called when the function is finished. If `waitConfirm` is false, then the function ends as soon as the transaction is accepted by the player on Metamask. If `waitConfirm` is true, the function doesn't end until the transaction is mined by the blockchain, which could take a couple of minutes, depending on the gas fee paid.
+
+Having `waitConfirm` set to false makes the scene respond faster, but the transaction at this point has no confirmations from the blockchain, so the function is vulnerable to a 0 gas fee exploit. If a player sets the gas price of the transaction to 0, or lower than the market fee, the transaction will never be carried out by the workers in the blockchain, but the player will experience things as if having paid the price. Setting `waitConfirm` to true prevents this risk, but delays the response of the scene.
 
 
 ### Get a player's MANA Balance
@@ -136,6 +139,7 @@ To make players in your scene send a currency token to a specific address, use t
 - `contractAddress`: The address of the smart contract for the token to be sent
 - `toAddress`: What ethereum address to send the tokens to
 - `amount`: How many tokens to send
+- `waitConfirm`: _boolean_ (optional) If true, the function will not be completed till the transaction is mined and added to a block in the blockchain. If false (default value), the function will be completed as soon as the transaction is requested.
 
 
 ```ts
@@ -152,7 +156,7 @@ import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
 let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
 
 button.addComponent(new OnPointerDown(async e => {
-	await currency.send('0x6B175474E89094C44Da98b954EedeAC495271d0F', myWallet, 1).then(
+	await currency.send('0x6B175474E89094C44Da98b954EedeAC495271d0F', myWallet, 1, true).then(
 		// open door
 	)
   }
@@ -161,7 +165,9 @@ button.addComponent(new OnPointerDown(async e => {
 
 In this scenario, when players click on the button, they are prompted by Metamask to accept the transaction, paying the required DAI sum plus an ETH gas fee dictated by the market at that time. Once that transaction is accepted on Metamask, the door opens.
 
-> Note: What's in the `.then()` argument that follows the `.send()` function gets called once the player approves the transaction in the Metamask window. The transaction at this point has no confirmations from the blockchain, so this function is currently vulnerable to a 0 gas fee exploit. If a player sets the gas price of the transaction to 0, or lower than the market fee, the transaction will never be carried out by the workers in the blockchain.
+What's executed after the `.send()` function ( in the `.then()` statement in this case ) only gets called when the function is finished. If `waitConfirm` is false, then the function ends as soon as the transaction is accepted by the player on Metamask. If `waitConfirm` is true, the function doesn't end until the transaction is mined by the blockchain, which could take a couple of minutes, depending on the gas fee paid.
+
+Having `waitConfirm` set to false makes the scene respond faster, but the transaction at this point has no confirmations from the blockchain, so the function is vulnerable to a 0 gas fee exploit. If a player sets the gas price of the transaction to 0, or lower than the market fee, the transaction will never be carried out by the workers in the blockchain, but the player will experience things as if having paid the price. Setting `waitConfirm` to true prevents this risk, but delays the response of the scene.
 
 
 ### Check balance
@@ -217,6 +223,7 @@ To make players in your scene transfer an NFT to a specific address, use the `tr
 - `contractAddress`: The address of the smart contract for the token to be sent
 - `toAddress`: What ethereum address to send the tokens to
 - `tokenId`: The id of the specific token to send within the smart contract
+- `waitConfirm`: _boolean_ (optional) If true, the function will not be completed till the transaction is mined and added to a block in the blockchain. If false (default value), the function will be completed as soon as the transaction is requested.
 
 
 ```ts
@@ -233,7 +240,7 @@ import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
 let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
 
 button.addComponent(new OnPointerDown(async e => {
-	await nft.transfer(Mainnet.Halloween2019Collection, myWallet, 1).then(
+	await nft.transfer(Mainnet.Halloween2019Collection, myWallet, 1, true).then(
 		// open door
 	)
   }
@@ -242,8 +249,9 @@ button.addComponent(new OnPointerDown(async e => {
 
 In this scenario, when players click on the button, they are prompted by Metamask to accept the transaction, transfering the NFT token plus paying an ETH gas fee dictated by the market at that time. Once that transaction is accepted on Metamask, the door opens.
 
-> Note: What's in the `.then()` argument that follows the `.send()` function gets called once the player approves the transaction in the Metamask window. The transaction at this point has no confirmations from the blockchain, so this function is currently vulnerable to a 0 gas fee exploit. If a player sets the gas price of the transaction to 0, or lower than the market fee, the transaction will never be carried out by the workers in the blockchain.
+What's executed after the `.send()` function ( in the `.then()` statement in this case ) only gets called when the function is finished. If `waitConfirm` is false, then the function ends as soon as the transaction is accepted by the player on Metamask. If `waitConfirm` is true, the function doesn't end until the transaction is mined by the blockchain, which could take a couple of minutes, depending on the gas fee paid.
 
+Having `waitConfirm` set to false makes the scene respond faster, but the transaction at this point has no confirmations from the blockchain, so the function is vulnerable to a 0 gas fee exploit. If a player sets the gas price of the transaction to 0, or lower than the market fee, the transaction will never be carried out by the workers in the blockchain, but the player will experience things as if having paid the price. Setting `waitConfirm` to true prevents this risk, but delays the response of the scene.
 
 ### Other functions
 
