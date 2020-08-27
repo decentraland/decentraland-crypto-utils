@@ -283,6 +283,8 @@ executeTask(async () => {
 })
 ```
 
+> Note: The string for the message to sign must start be preceded by `msg:`.
+
 Whenever the `signMessage()` funcition is called, Metamask will open on the player's browser to request to accept signing the message.
 
 The `signMessage()` function returns an object that contains:
