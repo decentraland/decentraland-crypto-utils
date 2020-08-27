@@ -9,9 +9,10 @@ import * as ERC20 from '../currency/index'
  *
  * @param toAddress Receiver address
  * @param amount Amount in ether to send
+ * @param waitConfirm Resolve promise when tx is mined or not
  */
-export function send(toAddress: eth.Address, amount: number) {
-  return ERC20.send('0x0f5d2fb29fb7d3cfee444a200298f468908cc942', toAddress, +ethEsm.toWei(amount.toString(), 'ether').toString())
+export function send(toAddress: eth.Address, amount: number, waitConfirm: boolean = false) {
+  return ERC20.send('0x0f5d2fb29fb7d3cfee444a200298f468908cc942', toAddress, +ethEsm.toWei(amount.toString(), 'ether').toString(), waitConfirm)
 }
 
 /**
