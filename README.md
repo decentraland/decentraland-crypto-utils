@@ -507,19 +507,103 @@ exchange()
 
 ## Third parties operating tokens
 
+You can check if a given contract is allowed to handle a given token for a player, and otherwise carry out a transaction to allow it to. 
+
+Many smart contracts require to be given explicit permission by a wallet owner to operate with the token on their behalf, especially when the contract has the ability to remove tokens from the owner's balance.
+
 ### Currencies
 
+To check if a contract has permissions to handle a specific currency token for a player, use the  `isApproved()` function. This function takes 3 arguments:
 
-setApproval()
+- `contractAddress`: _string_  Address of the token smartcontract to check
+- `owner`: _string_ Address of the player that is currently holding the token
+- `spender`: _string_ Address of the contract to check for having permissions to spend the token
 
-isApproved()
+```ts
+import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
+import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
 
-allowance()
+executeTask(async () => {
+	let approval = await currency.isApproved(mainnet.MANAToken, mainnet.Marketplace)
+	log(approval)
+})
+```
+
+The `isApproved()` function returns a boolean indicating wether permissions are there or not. 
+
+To check how much is the maximum allowance that a contract has to handle a specific currency token for a player, use the `allowance()` function. This function takes three arguments:
+
+- `contractAddress`: _string_  Address of the token smartcontract to check
+- `owner`: _string_ Address of the player that is currently holding the token
+- `spender`: _string_ Address of the contract to check for having permissions to spend the token
+
+```ts
+import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
+import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+
+executeTask(async () => {
+	let approval = await currency.allowance(mainnet.MANAToken, mainnet.Marketplace)
+	log(approval)
+})
+```
+
+The `allowance()` function returns a string with the number of allowed currency, expressed in wei units.
+
+
+To grant permissions to a contract to handle a specific currency token for a player, use the  `setApproval()` function. This function takes 4 arguments:
+
+- `contractAddress`: _string_  Address of the token smartcontract to check
+- `spender`: _string_ Address of the contract to check for having permissions to spend the token
+- `waitConfirm`: _boolean_ (optional) If true, resolve promise when the transaction is mined on the blockchain
+- `amount`: _string_ (optional) Maximum amount of the currency to allow the spender to spend
+
+
+```ts
+import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
+import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+
+executeTask(async () => {
+	await currency.setApproval(mainnet.MANAToken, mainnet.Marketplace, true)
+})
+```
+
 
 ### NFTs
 
-isApprovedForAll()
-setApprovalForAll()
+
+
+To check if a contract has permissions to handle a specific type of NFT for a player, use the  `isApprovedForAll()` function. This function takes 3 arguments:
+
+- `contractAddress`: _string_  Address of the token smartcontract to check
+- `assetHolder`: _string_ Address of the player that is currently holding the token
+- `operator`: _string_ Address of the contract to check for having permissions to handle the token
+
+```ts
+import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
+import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+
+executeTask(async () => {
+	let approval = await nft.isApproved(mainnet.Halloween2019Collection, mainnet.Marketplace)
+	log(approval)
+})
+```
+
+The `isApproved()` function returns a boolean indicating wether permissions are there or not. 
+
+To grant permissions to a contract to handle a specific NFT for a player, use the  `setApprovalForAll()` function. This function takes 4 arguments:
+
+- `contractAddress`: _string_  Address of the token smartcontract to check
+- `operator`: _string_ Address of the contract to check for having permissions to spend the token
+- `approved`: _boolean_ (optional) If _true_, sets the contract as approved for this NFT, if _false_, it removes these same approvals. _true_ by default.
+
+```ts
+import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
+import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+
+executeTask(async () => {
+	await nft.setApprovalForAll(mainnet.Halloween2019Collection, mainnet.Marketplace, true)
+})
+```
 
 
 ## Call functions from any contract
