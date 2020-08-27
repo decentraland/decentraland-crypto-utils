@@ -81,8 +81,11 @@ export async function setApproval(
   amount: string = '0x0000000000000000001000000000000000000000000000000000000000000000'
 ) {
   const { contract, requestManager } = await getContract(contractAddress)
+  const fromAddress = await getUserAccount()
 
-  const res = await contract.approve(spender, amount)
+  const res = await contract.approve(spender, amount, {
+    from: fromAddress
+  })
   let receipt = null
   if (waitConfirm) {
     while (receipt == null) {
