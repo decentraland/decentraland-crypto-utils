@@ -1,3 +1,6 @@
+import { getProvider } from '@decentraland/web3-provider'
+import * as ethEsm from 'eth-connect/esm'
+
 export const mainnet = {
   MANAToken: '0x0f5d2fb29fb7d3cfee444a200298f468908cc942',
   LANDRegistry: '0xa57e126b341b18c262ad25b86bb4f65b5e2ade45',
@@ -102,4 +105,12 @@ export const rinkeby = {
   LANDProxy: '0x28bef22df3e2040a4be64a9ca0e8b5ae2b91462d',
   LANDRegistry: '0xaf29226656fade9c97f51741e40f60c5bd67ee31',
   Multisig: '0x0de35b8b47b129877e0efca24e294b61d7e7eee3'
+}
+
+export async function getContract(contractAddress: string, abi: any) {
+  const provider = await getProvider()
+  const requestManager = new ethEsm.RequestManager(provider)
+  const factory = new ethEsm.ContractFactory(requestManager, abi)
+  const contract = (await factory.at(contractAddress)) as any
+  return { contract, provider, requestManager }
 }
