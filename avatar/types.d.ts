@@ -52,5 +52,7 @@ export interface ColorColor {
 
 export interface Snapshots {
   face: string
+  face128: string
+  face256: string
   body: string
 }
