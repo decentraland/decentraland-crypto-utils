@@ -11,7 +11,7 @@ import { Profiles } from './types'
 export async function getUserInfo(address?: eth.Address) {
   const realm = address
     ? 'https://peer.decentraland.org'
-    : await getCurrentRealm().then((r: any) => r.domain)
+    : await getCurrentRealm().then((r: any) => r.domain !='http://127.0.0.1:8000'? r.domain: 'https://peer.decentraland.org' )
   if (!address) address = await getUserAccount().then(a => a.toLowerCase())
   return (await fetch(`${realm}/content/entities/profiles?pointer=${address?.toLowerCase()}`)
     .then(res => res.json())
