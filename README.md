@@ -185,7 +185,7 @@ import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
 
 let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
 
-let balance = await mana.balance('0x6B175474E89094C44Da98b954EedeAC495271d0F', myWallet)
+let balance = await currency.balance('0x6B175474E89094C44Da98b954EedeAC495271d0F', myWallet)
 log(balance)
 ```
 
