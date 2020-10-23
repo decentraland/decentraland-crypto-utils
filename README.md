@@ -269,7 +269,7 @@ executeTask(async () => {
 The `getContract()` function also returns the `requestManager` object, which you can use to have greater control over the handling of the transaction.
 
 ```ts
-const {contract, requestManager} = await currency.getContract(mainnet.MANAToken)
+const {contract, requestManager} = await getContract(mainnet.MANAToken)
 ```
 
 
