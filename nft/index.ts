@@ -23,7 +23,7 @@ export async function getContract(contractAddress: eth.Address) {
 
 /**
  * Transfer an ERC721 token
- * 
+ *
  * @param contractAddress ERC721 smartcontract address
  * @param toAddress Receiver address
  * @param tokenId Token ID
@@ -39,7 +39,7 @@ export async function transfer(
   const fromAddress = await getUserAccount()
 
   const res = await contract.transferFrom(fromAddress, toAddress, tokenId, {
-    from: fromAddress
+    from: fromAddress,
   })
   let receipt = null
   if (waitConfirm) {
@@ -53,7 +53,7 @@ export async function transfer(
 
 /**
  * Set approval for ERC721
- * 
+ *
  * @param contractAddress ERC721 smartcontract address
  * @param operator Address approved to move the tokens
  * @param approved Boolean for approval
@@ -70,7 +70,7 @@ export async function setApprovalForAll(
 
 /**
  * Returns true if the operator is allowed to move the user tokens
- * 
+ *
  * @param contractAddress ERC721 smartcontract address
  * @param assetHolder User address
  * @param operator Address approved to move the tokens
@@ -83,4 +83,44 @@ export async function isApprovedForAll(
   const { contract } = await getContract(contractAddress)
   const res = await contract.isApprovedForAll(assetHolder, operator)
   return !!res
+}
+
+/**
+ * Returns true if the player owns at least one of the listed tokens from the indicated contract
+ *
+ * @param contractAddress ERC721 smartcontract address
+ * @param tokenIds One or multiple token IDs to check player ownership
+ */
+export async function checkTokens(contractAddress: eth.Address, tokenIds?: number | number[]) {
+  const { contract } = await getContract(contractAddress)
+  const fromAddress = await getUserAccount()
+
+  let balance = await contract.balanceOf(fromAddress)
+
+  if (Number(balance) == 0) {
+    return false
+  } else {
+    if (!tokenIds) {
+      return true
+    }
+
+    let res = false
+    for (let i = 0; i < Number(balance); i++) {
+      let token = Number(await contract.tokenOfOwnerByIndex(fromAddress, i))
+      if (typeof tokenIds === 'number') {
+        if (token == tokenIds) {
+          res = true
+          break
+        }
+      } else {
+        for (let j = 0; j < tokenIds.length; j++) {
+          if (token == tokenIds[j]) {
+            res = true
+            break
+          }
+        }
+      }
+    }
+    return res
+  }
 }
