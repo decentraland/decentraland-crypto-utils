@@ -3,7 +3,7 @@ import {
   BlockType,
   EstimateGasOptions
 } from '../utils/types'
-import * as ethEsm from 'eth-connect/esm'
+import * as eth from 'eth-connect'
 
 interface EventOptions {
   filter?: object
@@ -11,7 +11,7 @@ interface EventOptions {
   topics?: string[]
 }
 
-export class Erc721 extends ethEsm.Contract {
+export class Erc721 extends eth.Contract {
   constructor(jsonInterface: any[], address?: string, options?: any)
   clone(): Erc721
   supportsInterface(interfaceId: string | number[]): TransactionObject<boolean>

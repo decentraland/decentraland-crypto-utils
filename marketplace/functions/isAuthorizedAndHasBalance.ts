@@ -1,7 +1,7 @@
 import { getUserAccount } from '@decentraland/EthereumController'
 import { allowance } from '../../currency/index'
 import { mainnet as Addresses } from '../../utils/contract'
-import { toWei } from 'eth-connect/esm'
+import { toWei } from 'eth-connect'
 import { myBalance } from '../../mana/index'
 
 export async function isAuthorizedAndHasBalance(price: string, userAddress?: string) {

@@ -1,7 +1,6 @@
 import { getUserAccount } from '@decentraland/EthereumController'
 import { getProvider } from '@decentraland/web3-provider'
-import * as ethEsm from 'eth-connect/esm'
-import * as eth from 'eth-connect/eth-connect'
+import * as eth from 'eth-connect'
 
 import currencies from './currencies'
 
@@ -11,8 +10,8 @@ import { Kyberswap } from './kyberswap'
 
 export async function getContract(contractAddress: eth.Address) {
   const provider = await getProvider()
-  const requestManager = new ethEsm.RequestManager(provider)
-  const factory = new ethEsm.ContractFactory(requestManager, abi)
+  const requestManager = new eth.RequestManager(provider)
+  const factory = new eth.ContractFactory(requestManager, abi)
   const contract = (await factory.at(contractAddress)) as Kyberswap
   return { contract, provider, requestManager }
 }
@@ -113,7 +112,7 @@ export async function exchange(
 
   const currency = await getACurrency(srcTokenAddress)
 
-  const amount = ethEsm
+  const amount = eth
     .toBigNumber(srcAmount)
     .times('1e' + currency?.decimals)
     .toString()
@@ -130,6 +129,6 @@ export async function exchange(
     '0x57896044618658097711785492504343953926634992332820282019728792003956564819968', // (2 power 255) base 16
     slippage ? rate.expectedRate * ((100 - slippage) / 100) : rate.slippageRate,
     '0x440bbd6a888a36de6e2f6a25f65bc4e16874faa9',
-    '0x5045524d'
+    [parseInt('0x5045524d')]
   )
 }

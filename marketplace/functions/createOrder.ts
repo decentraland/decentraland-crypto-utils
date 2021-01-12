@@ -1,5 +1,5 @@
 import * as eth from 'eth-connect'
-import * as ethEsm from 'eth-connect/esm'
+import * as eth from 'eth-connect/esm'
 
 import { getUserAccount } from '@decentraland/EthereumController'
 import { getContract } from '../contract'
@@ -36,7 +36,7 @@ export async function createOrder(
   const res = await contract.createOrder(
     nftAddress,
     assetId,
-    ethEsm.toWei(price, 'ether').toString(),
+    eth.toWei(price, 'ether').toString(),
     expireAt,
     {
       from: fromAddress

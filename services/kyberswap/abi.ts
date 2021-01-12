@@ -1,695 +1,348 @@
 export default [
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "alerter",
-        "type": "address"
-      }
-    ],
-    "name": "removeAlerter",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [{ internalType: 'address', name: '_admin', type: 'address' }],
+    stateMutability: 'nonpayable',
+    type: 'constructor'
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "enabled",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: 'address', name: 'newAdmin', type: 'address' },
+      { indexed: false, internalType: 'address', name: 'previousAdmin', type: 'address' }
     ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    name: 'AdminClaimed',
+    type: 'event'
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "pendingAdmin",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: 'address', name: 'newAlerter', type: 'address' },
+      { indexed: false, internalType: 'bool', name: 'isAdd', type: 'bool' }
     ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    name: 'AlerterAdded',
+    type: 'event'
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "getOperators",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address[]"
-      }
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
+      { indexed: false, internalType: 'address', name: 'sendTo', type: 'address' }
     ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    name: 'EtherWithdraw',
+    type: 'event'
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "src",
-        "type": "address"
-      },
-      {
-        "name": "srcAmount",
-        "type": "uint256"
-      },
-      {
-        "name": "dest",
-        "type": "address"
-      },
-      {
-        "name": "destAddress",
-        "type": "address"
-      },
-      {
-        "name": "maxDestAmount",
-        "type": "uint256"
-      },
-      {
-        "name": "minConversionRate",
-        "type": "uint256"
-      },
-      {
-        "name": "walletId",
-        "type": "address"
-      },
-      {
-        "name": "hint",
-        "type": "bytes"
-      }
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: 'address', name: 'trader', type: 'address' },
+      { indexed: false, internalType: 'contract IERC20', name: 'src', type: 'address' },
+      { indexed: false, internalType: 'contract IERC20', name: 'dest', type: 'address' },
+      { indexed: false, internalType: 'address', name: 'destAddress', type: 'address' },
+      { indexed: false, internalType: 'uint256', name: 'actualSrcAmount', type: 'uint256' },
+      { indexed: false, internalType: 'uint256', name: 'actualDestAmount', type: 'uint256' },
+      { indexed: false, internalType: 'address', name: 'platformWallet', type: 'address' },
+      { indexed: false, internalType: 'uint256', name: 'platformFeeBps', type: 'uint256' }
     ],
-    "name": "tradeWithHint",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
+    name: 'ExecuteTrade',
+    type: 'event'
   },
   {
-    "constant": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "name": "srcAmount",
-        "type": "uint256"
-      },
-      {
-        "name": "minConversionRate",
-        "type": "uint256"
+        indexed: false,
+        internalType: 'contract IKyberHint',
+        name: 'kyberHintHandler',
+        type: 'address'
       }
     ],
-    "name": "swapTokenToEther",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: 'KyberHintHandlerSet',
+    type: 'event'
   },
   {
-    "constant": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "name": "token",
-        "type": "address"
+        indexed: false,
+        internalType: 'contract IKyberNetwork',
+        name: 'newKyberNetwork',
+        type: 'address'
       },
       {
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "name": "sendTo",
-        "type": "address"
+        indexed: false,
+        internalType: 'contract IKyberNetwork',
+        name: 'previousKyberNetwork',
+        type: 'address'
       }
     ],
-    "name": "withdrawToken",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: 'KyberNetworkSet',
+    type: 'event'
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "maxGasPrice",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: 'address', name: 'newOperator', type: 'address' },
+      { indexed: false, internalType: 'bool', name: 'isAdd', type: 'bool' }
     ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    name: 'OperatorAdded',
+    type: 'event'
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "newAlerter",
-        "type": "address"
-      }
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: 'contract IERC20', name: 'token', type: 'address' },
+      { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
+      { indexed: false, internalType: 'address', name: 'sendTo', type: 'address' }
     ],
-    "name": "addAlerter",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: 'TokenWithdraw',
+    type: 'event'
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "kyberNetworkContract",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    anonymous: false,
+    inputs: [{ indexed: false, internalType: 'address', name: 'pendingAdmin', type: 'address' }],
+    name: 'TransferAdminPending',
+    type: 'event'
   },
   {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "user",
-        "type": "address"
-      }
-    ],
-    "name": "getUserCapInWei",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    inputs: [{ internalType: 'address', name: 'newAlerter', type: 'address' }],
+    name: 'addAlerter',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "src",
-        "type": "address"
-      },
-      {
-        "name": "srcAmount",
-        "type": "uint256"
-      },
-      {
-        "name": "dest",
-        "type": "address"
-      },
-      {
-        "name": "minConversionRate",
-        "type": "uint256"
-      }
-    ],
-    "name": "swapTokenToToken",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [{ internalType: 'address', name: 'newOperator', type: 'address' }],
+    name: 'addOperator',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "newAdmin",
-        "type": "address"
-      }
-    ],
-    "name": "transferAdmin",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [],
+    name: 'admin',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function'
+  },
+  { inputs: [], name: 'claimAdmin', outputs: [], stateMutability: 'nonpayable', type: 'function' },
+  {
+    inputs: [],
+    name: 'enabled',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    "constant": false,
-    "inputs": [],
-    "name": "claimAdmin",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [],
+    name: 'getAlerters',
+    outputs: [{ internalType: 'address[]', name: '', type: 'address[]' }],
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "name": "minConversionRate",
-        "type": "uint256"
-      }
+    inputs: [
+      { internalType: 'contract ERC20', name: 'src', type: 'address' },
+      { internalType: 'contract ERC20', name: 'dest', type: 'address' },
+      { internalType: 'uint256', name: 'srcQty', type: 'uint256' }
     ],
-    "name": "swapEtherToToken",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
+    name: 'getExpectedRate',
+    outputs: [
+      { internalType: 'uint256', name: 'expectedRate', type: 'uint256' },
+      { internalType: 'uint256', name: 'worstRate', type: 'uint256' }
     ],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "newAdmin",
-        "type": "address"
-      }
+    inputs: [
+      { internalType: 'contract IERC20', name: 'src', type: 'address' },
+      { internalType: 'contract IERC20', name: 'dest', type: 'address' },
+      { internalType: 'uint256', name: 'srcQty', type: 'uint256' },
+      { internalType: 'uint256', name: 'platformFeeBps', type: 'uint256' },
+      { internalType: 'bytes', name: 'hint', type: 'bytes' }
     ],
-    "name": "transferAdminQuickly",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: 'getExpectedRateAfterFee',
+    outputs: [{ internalType: 'uint256', name: 'expectedRate', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "getAlerters",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address[]"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    inputs: [],
+    name: 'getOperators',
+    outputs: [{ internalType: 'address[]', name: '', type: 'address[]' }],
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "src",
-        "type": "address"
-      },
-      {
-        "name": "dest",
-        "type": "address"
-      },
-      {
-        "name": "srcQty",
-        "type": "uint256"
-      }
-    ],
-    "name": "getExpectedRate",
-    "outputs": [
-      {
-        "name": "expectedRate",
-        "type": "uint256"
-      },
-      {
-        "name": "slippageRate",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    inputs: [],
+    name: 'kyberHintHandler',
+    outputs: [{ internalType: 'contract IKyberHint', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "name": "token",
-        "type": "address"
-      }
-    ],
-    "name": "getUserCapInTokenWei",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    inputs: [],
+    name: 'kyberNetwork',
+    outputs: [{ internalType: 'contract IKyberNetwork', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "newOperator",
-        "type": "address"
-      }
-    ],
-    "name": "addOperator",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [],
+    name: 'maxGasPrice',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_kyberNetworkContract",
-        "type": "address"
-      }
-    ],
-    "name": "setKyberNetworkContract",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [],
+    name: 'pendingAdmin',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "operator",
-        "type": "address"
-      }
-    ],
-    "name": "removeOperator",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [{ internalType: 'address', name: 'alerter', type: 'address' }],
+    name: 'removeAlerter',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "field",
-        "type": "bytes32"
-      }
-    ],
-    "name": "info",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    inputs: [{ internalType: 'address', name: 'operator', type: 'address' }],
+    name: 'removeOperator',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "src",
-        "type": "address"
-      },
-      {
-        "name": "srcAmount",
-        "type": "uint256"
-      },
-      {
-        "name": "dest",
-        "type": "address"
-      },
-      {
-        "name": "destAddress",
-        "type": "address"
-      },
-      {
-        "name": "maxDestAmount",
-        "type": "uint256"
-      },
-      {
-        "name": "minConversionRate",
-        "type": "uint256"
-      },
-      {
-        "name": "walletId",
-        "type": "address"
-      }
-    ],
-    "name": "trade",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
+    inputs: [{ internalType: 'contract IKyberHint', name: '_kyberHintHandler', type: 'address' }],
+    name: 'setHintHandler',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "name": "sendTo",
-        "type": "address"
-      }
-    ],
-    "name": "withdrawEther",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [{ internalType: 'contract IKyberNetwork', name: '_kyberNetwork', type: 'address' }],
+    name: 'setKyberNetwork',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "name": "user",
-        "type": "address"
-      }
+    inputs: [
+      { internalType: 'contract IERC20', name: 'token', type: 'address' },
+      { internalType: 'uint256', name: 'minConversionRate', type: 'uint256' }
     ],
-    "name": "getBalance",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    name: 'swapEtherToToken',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'payable',
+    type: 'function'
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "admin",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
+    inputs: [
+      { internalType: 'contract IERC20', name: 'token', type: 'address' },
+      { internalType: 'uint256', name: 'srcAmount', type: 'uint256' },
+      { internalType: 'uint256', name: 'minConversionRate', type: 'uint256' }
     ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    name: 'swapTokenToEther',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    "inputs": [
-      {
-        "name": "_admin",
-        "type": "address"
-      }
+    inputs: [
+      { internalType: 'contract IERC20', name: 'src', type: 'address' },
+      { internalType: 'uint256', name: 'srcAmount', type: 'uint256' },
+      { internalType: 'contract IERC20', name: 'dest', type: 'address' },
+      { internalType: 'uint256', name: 'minConversionRate', type: 'uint256' }
     ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    name: 'swapTokenToToken',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "trader",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "src",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "dest",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "actualSrcAmount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "actualDestAmount",
-        "type": "uint256"
-      }
+    inputs: [
+      { internalType: 'contract IERC20', name: 'src', type: 'address' },
+      { internalType: 'uint256', name: 'srcAmount', type: 'uint256' },
+      { internalType: 'contract IERC20', name: 'dest', type: 'address' },
+      { internalType: 'address payable', name: 'destAddress', type: 'address' },
+      { internalType: 'uint256', name: 'maxDestAmount', type: 'uint256' },
+      { internalType: 'uint256', name: 'minConversionRate', type: 'uint256' },
+      { internalType: 'address payable', name: 'platformWallet', type: 'address' }
     ],
-    "name": "ExecuteTrade",
-    "type": "event"
+    name: 'trade',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'payable',
+    type: 'function'
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "newNetworkContract",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "oldNetworkContract",
-        "type": "address"
-      }
+    inputs: [
+      { internalType: 'contract ERC20', name: 'src', type: 'address' },
+      { internalType: 'uint256', name: 'srcAmount', type: 'uint256' },
+      { internalType: 'contract ERC20', name: 'dest', type: 'address' },
+      { internalType: 'address payable', name: 'destAddress', type: 'address' },
+      { internalType: 'uint256', name: 'maxDestAmount', type: 'uint256' },
+      { internalType: 'uint256', name: 'minConversionRate', type: 'uint256' },
+      { internalType: 'address payable', name: 'walletId', type: 'address' },
+      { internalType: 'bytes', name: 'hint', type: 'bytes' }
     ],
-    "name": "KyberNetworkSet",
-    "type": "event"
+    name: 'tradeWithHint',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'payable',
+    type: 'function'
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "sendTo",
-        "type": "address"
-      }
+    inputs: [
+      { internalType: 'contract IERC20', name: 'src', type: 'address' },
+      { internalType: 'uint256', name: 'srcAmount', type: 'uint256' },
+      { internalType: 'contract IERC20', name: 'dest', type: 'address' },
+      { internalType: 'address payable', name: 'destAddress', type: 'address' },
+      { internalType: 'uint256', name: 'maxDestAmount', type: 'uint256' },
+      { internalType: 'uint256', name: 'minConversionRate', type: 'uint256' },
+      { internalType: 'address payable', name: 'platformWallet', type: 'address' },
+      { internalType: 'uint256', name: 'platformFeeBps', type: 'uint256' },
+      { internalType: 'bytes', name: 'hint', type: 'bytes' }
     ],
-    "name": "TokenWithdraw",
-    "type": "event"
+    name: 'tradeWithHintAndFee',
+    outputs: [{ internalType: 'uint256', name: 'destAmount', type: 'uint256' }],
+    stateMutability: 'payable',
+    type: 'function'
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "sendTo",
-        "type": "address"
-      }
-    ],
-    "name": "EtherWithdraw",
-    "type": "event"
+    inputs: [{ internalType: 'address', name: 'newAdmin', type: 'address' }],
+    name: 'transferAdmin',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "pendingAdmin",
-        "type": "address"
-      }
-    ],
-    "name": "TransferAdminPending",
-    "type": "event"
+    inputs: [{ internalType: 'address', name: 'newAdmin', type: 'address' }],
+    name: 'transferAdminQuickly',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "newAdmin",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "previousAdmin",
-        "type": "address"
-      }
+    inputs: [
+      { internalType: 'uint256', name: 'amount', type: 'uint256' },
+      { internalType: 'address payable', name: 'sendTo', type: 'address' }
     ],
-    "name": "AdminClaimed",
-    "type": "event"
+    name: 'withdrawEther',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "newAlerter",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "isAdd",
-        "type": "bool"
-      }
+    inputs: [
+      { internalType: 'contract IERC20', name: 'token', type: 'address' },
+      { internalType: 'uint256', name: 'amount', type: 'uint256' },
+      { internalType: 'address', name: 'sendTo', type: 'address' }
     ],
-    "name": "AlerterAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "newOperator",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "isAdd",
-        "type": "bool"
-      }
-    ],
-    "name": "OperatorAdded",
-    "type": "event"
+    name: 'withdrawToken',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
   }
 ]

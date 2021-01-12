@@ -1,5 +1,5 @@
 import { TransactionObject, BlockType, EstimateGasOptions } from '../utils/types'
-import * as ethEsm from 'eth-connect/esm'
+import * as eth from 'eth-connect'
 
 interface EventOptions {
   filter?: object
@@ -7,14 +7,15 @@ interface EventOptions {
   topics?: string[]
 }
 
-export class Erc20 extends ethEsm.Contract {
+export class Erc20 extends eth.Contract {
   constructor(jsonInterface: any[], address?: string, options?: any)
   clone(): Erc20
   name(): TransactionObject<string>
 
   approve(
     _spender: string,
-    _value: number | string, options?: EstimateGasOptions
+    _value: number | string,
+    options?: EstimateGasOptions
   ): TransactionObject<boolean>
 
   totalSupply(): TransactionObject<string>
@@ -32,7 +33,11 @@ export class Erc20 extends ethEsm.Contract {
 
   symbol(): TransactionObject<string>
 
-  transfer(_to: string, _value: number | string, options?: EstimateGasOptions): TransactionObject<boolean>
+  transfer(
+    _to: string,
+    _value: number | string,
+    options?: EstimateGasOptions
+  ): TransactionObject<boolean>
 
   allowance(_owner: string, _spender: string): TransactionObject<string>
 }

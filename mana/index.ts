@@ -1,5 +1,4 @@
-import * as eth from 'eth-connect/eth-connect'
-import * as ethEsm from 'eth-connect/esm'
+import * as eth from 'eth-connect'
 import { getUserAccount } from '@decentraland/EthereumController'
 
 import * as ERC20 from '../currency/index'
@@ -12,7 +11,7 @@ import * as ERC20 from '../currency/index'
  * @param waitConfirm Resolve promise when tx is mined or not
  */
 export function send(toAddress: eth.Address, amount: number, waitConfirm: boolean = false) {
-  return ERC20.send('0x0f5d2fb29fb7d3cfee444a200298f468908cc942', toAddress, +ethEsm.toWei(amount.toString(), 'ether').toString(), waitConfirm)
+  return ERC20.send('0x0f5d2fb29fb7d3cfee444a200298f468908cc942', toAddress, +eth.toWei(amount.toString(), 'ether').toString(), waitConfirm)
 }
 
 /**

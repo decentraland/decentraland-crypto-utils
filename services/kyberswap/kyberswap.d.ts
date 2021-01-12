@@ -1,9 +1,5 @@
-import {
-  TransactionObject,
-  BlockType,
-  EstimateGasOptions
-} from '../../utils/types'
-import * as ethEsm from 'eth-connect/esm'
+import { TransactionObject, BlockType, EstimateGasOptions } from '../../utils/types'
+import * as eth from 'eth-connect'
 
 interface EventOptions {
   filter?: object
@@ -11,16 +7,82 @@ interface EventOptions {
   topics?: string[]
 }
 
-export class Kyberswap extends ethEsm.Contract {
+export class Kyberswap extends eth.Contract {
   constructor(jsonInterface: any[], address?: string, options?: any)
   clone(): Kyberswap
-  removeAlerter(alerter: string): TransactionObject<void>
+  addAlerter(newAlerter: string): TransactionObject<void>
+
+  addOperator(newOperator: string): TransactionObject<void>
+
+  admin(): TransactionObject<string>
+
+  claimAdmin(): TransactionObject<void>
 
   enabled(): TransactionObject<boolean>
 
-  pendingAdmin(): TransactionObject<string>
+  getAlerters(): TransactionObject<string[]>
+
+  getExpectedRate(
+    src: string,
+    dest: string,
+    srcQty: number | string
+  ): TransactionObject<{
+    expectedRate: string
+    worstRate: string
+    0: string
+    1: string
+  }>
+
+  getExpectedRateAfterFee(
+    src: string,
+    dest: string,
+    srcQty: number | string,
+    platformFeeBps: number | string,
+    hint: string | number[]
+  ): TransactionObject<string>
 
   getOperators(): TransactionObject<string[]>
+
+  kyberHintHandler(): TransactionObject<string>
+
+  kyberNetwork(): TransactionObject<string>
+
+  maxGasPrice(): TransactionObject<string>
+
+  pendingAdmin(): TransactionObject<string>
+
+  removeAlerter(alerter: string): TransactionObject<void>
+
+  removeOperator(operator: string): TransactionObject<void>
+
+  setHintHandler(_kyberHintHandler: string): TransactionObject<void>
+
+  setKyberNetwork(_kyberNetwork: string): TransactionObject<void>
+
+  swapEtherToToken(token: string, minConversionRate: number | string): TransactionObject<string>
+
+  swapTokenToEther(
+    token: string,
+    srcAmount: number | string,
+    minConversionRate: number | string
+  ): TransactionObject<string>
+
+  swapTokenToToken(
+    src: string,
+    srcAmount: number | string,
+    dest: string,
+    minConversionRate: number | string
+  ): TransactionObject<string>
+
+  trade(
+    src: string,
+    srcAmount: number | string,
+    dest: string,
+    destAddress: string,
+    maxDestAmount: number | string,
+    minConversionRate: number | string,
+    platformWallet: string
+  ): TransactionObject<string>
 
   tradeWithHint(
     src: string,
@@ -33,85 +95,23 @@ export class Kyberswap extends ethEsm.Contract {
     hint: string | number[]
   ): TransactionObject<string>
 
-  swapTokenToEther(
-    token: string,
-    srcAmount: number | string,
-    minConversionRate: number | string
-  ): TransactionObject<string>
-
-  withdrawToken(
-    token: string,
-    amount: number | string,
-    sendTo: string
-  ): TransactionObject<void>
-
-  maxGasPrice(): TransactionObject<string>
-
-  addAlerter(newAlerter: string): TransactionObject<void>
-
-  kyberNetworkContract(): TransactionObject<string>
-
-  getUserCapInWei(user: string): TransactionObject<string>
-
-  swapTokenToToken(
-    src: string,
-    srcAmount: number | string,
-    dest: string,
-    minConversionRate: number | string
-  ): TransactionObject<string>
-
-  transferAdmin(newAdmin: string): TransactionObject<void>
-
-  claimAdmin(): TransactionObject<void>
-
-  swapEtherToToken(
-    token: string,
-    minConversionRate: number | string
-  ): TransactionObject<string>
-
-  transferAdminQuickly(newAdmin: string): TransactionObject<void>
-
-  getAlerters(): TransactionObject<string[]>
-
-  getExpectedRate(
-    src: string,
-    dest: string,
-    srcQty: number | string
-  ): TransactionObject<{
-    expectedRate: string
-    slippageRate: string
-    0: string
-    1: string
-  }>
-
-  getUserCapInTokenWei(user: string, token: string): TransactionObject<string>
-
-  addOperator(newOperator: string): TransactionObject<void>
-
-  setKyberNetworkContract(
-    _kyberNetworkContract: string
-  ): TransactionObject<void>
-
-  removeOperator(operator: string): TransactionObject<void>
-
-  info(field: string | number[]): TransactionObject<string>
-
-  trade(
+  tradeWithHintAndFee(
     src: string,
     srcAmount: number | string,
     dest: string,
     destAddress: string,
     maxDestAmount: number | string,
     minConversionRate: number | string,
-    walletId: string
+    platformWallet: string,
+    platformFeeBps: number | string,
+    hint: string | number[]
   ): TransactionObject<string>
 
-  withdrawEther(
-    amount: number | string,
-    sendTo: string
-  ): TransactionObject<void>
+  transferAdmin(newAdmin: string): TransactionObject<void>
 
-  getBalance(token: string, user: string): TransactionObject<string>
+  transferAdminQuickly(newAdmin: string): TransactionObject<void>
 
-  admin(): TransactionObject<string>
+  withdrawEther(amount: number | string, sendTo: string): TransactionObject<void>
+
+  withdrawToken(token: string, amount: number | string, sendTo: string): TransactionObject<void>
 }

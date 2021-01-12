@@ -1,5 +1,5 @@
 import { getProvider } from '@decentraland/web3-provider'
-import * as ethEsm from 'eth-connect/esm'
+import * as eth from 'eth-connect'
 
 export const mainnet = {
   MANAToken: '0x0f5d2fb29fb7d3cfee444a200298f468908cc942',
@@ -109,8 +109,8 @@ export const rinkeby = {
 
 export async function getContract(contractAddress: string, abi: any) {
   const provider = await getProvider()
-  const requestManager = new ethEsm.RequestManager(provider)
-  const factory = new ethEsm.ContractFactory(requestManager, abi)
+  const requestManager = new eth.RequestManager(provider)
+  const factory = new eth.ContractFactory(requestManager, abi)
   const contract = (await factory.at(contractAddress)) as any
   return { contract, provider, requestManager }
 }

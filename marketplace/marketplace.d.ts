@@ -3,7 +3,7 @@ import {
   BlockType,
   EstimateGasOptions
 } from '../utils/types'
-import * as ethEsm from 'eth-connect/esm'
+import * as eth from 'eth-connect'
 
 
 interface EventOptions {
@@ -12,7 +12,7 @@ interface EventOptions {
   topics?: string[]
 }
 
-export class Marketplace extends ethEsm.Contract {
+export class Marketplace extends eth.Contract {
   constructor(jsonInterface: any[], address?: string, options?: any)
   clone(): Marketplace
   setOwnerCutPerMillion(
