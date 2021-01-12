@@ -1,5 +1,4 @@
 import * as eth from 'eth-connect'
-import * as eth from 'eth-connect/esm'
 
 import { getUserAccount } from '@decentraland/EthereumController'
 import { getContract } from '../contract'
