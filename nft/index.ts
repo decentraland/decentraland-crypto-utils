@@ -36,9 +36,14 @@ export async function transfer(
   const { contract, requestManager } = await getContract(contractAddress)
   const fromAddress = await getUserAccount()
 
-  const res = await contract.transferFrom(fromAddress, toAddress, tokenId, {
-    from: fromAddress,
-  })
+  const res = await contract.transferFrom(
+    fromAddress.toLowerCase(),
+    toAddress.toLowerCase(),
+    tokenId,
+    {
+      from: fromAddress,
+    }
+  )
   let receipt = null
   if (waitConfirm) {
     while (receipt == null) {
