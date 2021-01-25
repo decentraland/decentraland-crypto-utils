@@ -11,6 +11,7 @@ This library includes a number of helpful pre-built tools that help you deal wit
 	- [Other Functions](#other-functions)
 - [NFTs](#NFTs)
 	- [Transfer an NFT](#transfer-an-nft)
+	- [Check player for Tokens[(#check-player-for-tokens)
 	- [Other Functions](#other-functions-1)
 - [Sign Message](#Signing-Messages)
 - [Decentraland contracts](#decentraland-contracts)
@@ -251,6 +252,26 @@ In this scenario, when players click on the button, they are prompted by Metamas
 What's executed after the `.send()` function ( in the `.then()` statement in this case ) only gets called when the function is finished. If `waitConfirm` is false, then the function ends as soon as the transaction is accepted by the player on Metamask. If `waitConfirm` is true, the function doesn't end until the transaction is mined by the blockchain, which could take a couple of minutes, depending on the gas fee paid.
 
 Having `waitConfirm` set to false makes the scene respond faster, but the transaction at this point has no confirmations from the blockchain, so the function is vulnerable to a 0 gas fee exploit. If a player sets the gas price of the transaction to 0, or lower than the market fee, the transaction will never be carried out by the workers in the blockchain, but the player will experience things as if having paid the price. Setting `waitConfirm` to true prevents this risk, but delays the response of the scene.
+
+### Check player for Tokens
+
+Check if a player holds any specific tokens in their wallet. You can either check for any token that belogs to a given contract (eg: any cryptokitty), or for particular token IDs within that contract (eg: only for cryptokitty number 500 or 501).
+
+This function requires the following arguments:
+
+- `contractAddress`: The address of the smart contract for the token to be checked
+- `tokenIds`: One or multiple token IDs to check player ownership. This can be a single number, or an array of multiple numbers.
+
+```ts
+import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
+import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+
+executeTask(async () => {
+	let await hasToken = nft.checkTokens(mainnet.Halloween2019Collection, [1, 2, 3, 4, 5])
+	// only open door to vip area for those that have the tokens
+})
+```
+
 
 ### Other functions
 
