@@ -255,12 +255,14 @@ Having `waitConfirm` set to false makes the scene respond faster, but the transa
 
 ### Check player for Tokens
 
-Check if a player holds any specific tokens in their wallet. You can either check for any token that belogs to a given contract (eg: any cryptokitty), or for particular token IDs within that contract (eg: only for cryptokitty number 500 or 501).
+Check if a player holds any specific tokens in their wallet using `checkTokens()`. You can either check for any token that belogs to a given contract (eg: any cryptokitty), or for particular token IDs within that contract (eg: only for cryptokitty number 500 or 501).
 
 This function requires the following arguments:
 
 - `contractAddress`: The address of the smart contract for the token to be checked
 - `tokenIds`: One or multiple token IDs to check player ownership. This can be a single number, or an array of multiple numbers.
+
+The function returns _true_ or _false_ depending on if the player's wallet owns any of the indicated tokens.
 
 ```ts
 import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
@@ -271,6 +273,8 @@ executeTask(async () => {
 	// only open door to vip area for those that have the tokens
 })
 ```
+
+
 
 
 ### Other functions
