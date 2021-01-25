@@ -11,7 +11,7 @@ This library includes a number of helpful pre-built tools that help you deal wit
 	- [Other Functions](#other-functions)
 - [NFTs](#NFTs)
 	- [Transfer an NFT](#transfer-an-nft)
-	- [Check player for Tokens[(#check-player-for-tokens)
+	- [Check player for Tokens](#check-player-for-tokens)
 	- [Other Functions](#other-functions-1)
 - [Sign Message](#Signing-Messages)
 - [Decentraland contracts](#decentraland-contracts)
