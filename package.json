@@ -1,11 +1,13 @@
 {
-  "name": "@dcl/crypto-utils",
+  "name": "@dcl/crypto-scene-utils",
   "version": "0.0.0-development",
   "description": "A collection of helpers to make it easier to build a Decentraland scene using the SDK.",
-  "main": "index.ts",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "decentralandLibrary": {},
   "scripts": {
-	"semantic-release": "semantic-release",
-	"build": "rollup -c --environment BUILD:production"
+    "semantic-release": "semantic-release",
+    "build": "rollup -c --environment BUILD:production"
   },
   "repository": {
     "type": "git",
@@ -26,14 +28,14 @@
   "devDependencies": {
     "prettier": "^2.2.1",
     "semantic-release": "^17.3.6",
-	"typescript": "^4.1.3",
-	"rollup": "^2.35.1",
+    "typescript": "^4.1.3",
+    "rollup": "^2.35.1",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.29.0",
-	"decentraland-ecs": "latest",
-	"decentraland-ecs-utils": "^1.4.8",
+    "decentraland-ecs": "latest",
+    "decentraland-ecs-utils": "^1.4.8",
     "eth-connect": "^5.0.0"
   },
   "publishConfig": {
@@ -41,5 +43,8 @@
   },
   "bundleDependencies": [
     "eth-connect"
+  ],
+  "files": [
+    "dist"
   ]
 }
