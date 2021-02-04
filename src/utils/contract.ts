@@ -1,4 +1,4 @@
-import { getProvider } from '@decentraland/web3-provider'
+import { getProvider } from './@decentraland/web3-provider'
 import * as eth from 'eth-connect'
 
 export const mainnet = {
@@ -58,7 +58,7 @@ export const mainnet = {
   BurningStore: '0x0822d44c2e2f96d4cccad80610134861802b2cca',
   BaseList: '0x21b6EFf834d7cc8c12A5Ec924939aa521F0FE83F',
   POIAllowListProxy: '0x0ef15a1c7a49429a36cb46d4da8c53119242b54e',
-  NameDenyListProxy: '0x0c4c90a4f29872a2e9ef4c4be3d419792bca9a36'
+  NameDenyListProxy: '0x0c4c90a4f29872a2e9ef4c4be3d419792bca9a36',
 }
 
 export const ropsten = {
@@ -92,19 +92,19 @@ export const ropsten = {
   AdapterFeeCollector: '0x5DC888024cB599CfDdb9E6483ED6bAe1fA9e9D18',
   AdapterConverter: '0x2782eb28Dcb1eF4E7632273cd4e347e130Ce4646',
   POIAllowlist: '0x5DC4a5C214f2161F0D5595a6dDd9352409aE3Ab4',
-  NAMEDenylist: '0x20c6f1e86eba703a14414a0cbc1b55c89dba7a0f'
+  NAMEDenylist: '0x20c6f1e86eba703a14414a0cbc1b55c89dba7a0f',
 }
 export const kovan = {
   MANAToken: '0x230fc362413d9e862326c2c7084610a5a2fdf78a',
   LANDRegistry: '0x2059291430b9aa2F79547f657816eFb816b36614',
   LANDProxy: '0x537263c440943f6a6808bCb8CcB3fe03EE838aD1',
-  Marketplace: '0x6f44f195999f06aeb5872db96cdc517f1e839f13'
+  Marketplace: '0x6f44f195999f06aeb5872db96cdc517f1e839f13',
 }
 export const rinkeby = {
   MANAToken: '0x28bce5263f5d7f4eb7e8c6d5d78275ca455bac63',
   LANDProxy: '0x28bef22df3e2040a4be64a9ca0e8b5ae2b91462d',
   LANDRegistry: '0xaf29226656fade9c97f51741e40f60c5bd67ee31',
-  Multisig: '0x0de35b8b47b129877e0efca24e294b61d7e7eee3'
+  Multisig: '0x0de35b8b47b129877e0efca24e294b61d7e7eee3',
 }
 
 export async function getContract(contractAddress: string, abi: any) {

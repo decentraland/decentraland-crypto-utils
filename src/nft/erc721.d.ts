@@ -1,8 +1,4 @@
-import {
-  TransactionObject,
-  BlockType,
-  EstimateGasOptions
-} from '../utils/types'
+import { TransactionObject, BlockType, EstimateGasOptions } from '../utils/types'
 import * as eth from 'eth-connect'
 
 interface EventOptions {
@@ -48,10 +44,7 @@ export class Erc721 extends eth.Contract {
     options?: EstimateGasOptions
   ): TransactionObject<void>
 
-  tokenOfOwnerByIndex(
-    owner: string,
-    index: number | string
-  ): TransactionObject<string>
+  tokenOfOwnerByIndex(owner: string, index: number | string): TransactionObject<string>
 
   addWearable(
     _wearableId: string,
@@ -80,10 +73,7 @@ export class Erc721 extends eth.Contract {
 
   tokenByIndex(index: number | string): TransactionObject<string>
 
-  setBaseURI(
-    _baseURI: string,
-    options?: EstimateGasOptions
-  ): TransactionObject<void>
+  setBaseURI(_baseURI: string, options?: EstimateGasOptions): TransactionObject<void>
 
   issueToken(
     _beneficiary: string,
@@ -129,10 +119,7 @@ export class Erc721 extends eth.Contract {
 
   isApprovedForAll(owner: string, operator: string): TransactionObject<boolean>
 
-  transferOwnership(
-    newOwner: string,
-    options?: EstimateGasOptions
-  ): TransactionObject<void>
+  transferOwnership(newOwner: string, options?: EstimateGasOptions): TransactionObject<void>
 
   batchTransferFrom(
     _from: string,

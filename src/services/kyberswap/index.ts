@@ -1,5 +1,5 @@
-import { getUserAccount } from '@decentraland/EthereumController'
-import { getProvider } from '@decentraland/web3-provider'
+import { getUserAccount } from './@decentraland/EthereumController'
+import { getProvider } from './@decentraland/web3-provider'
 import * as eth from 'eth-connect'
 
 import currencies from './currencies'
@@ -46,7 +46,7 @@ export async function getACurrency(curr: string): Promise<Currency | undefined> 
  * Retrieves the trading pairs on Kyberswap
  */
 export async function getMarketPair() {
-  return (await fetch('https://api.kyber.network/pairs/market', { headers: {} }).then(r =>
+  return (await fetch('https://api.kyber.network/pairs/market', { headers: {} }).then((r) =>
     r.json()
   )) as MarketData
 }
@@ -67,7 +67,7 @@ export async function getMarketPair() {
 export async function getQuote(src: string, dest: string, srcAmount: string) {
   return (await fetch(
     `https://api.kyber.network/quote_amount?quote=${dest}&base=${src}&base_amount=${srcAmount}&type=buy`
-  ).then(r => r.json())) as { data: number; error: boolean }
+  ).then((r) => r.json())) as { data: number; error: boolean }
 }
 
 /**
@@ -80,7 +80,7 @@ export async function getQuote(src: string, dest: string, srcAmount: string) {
 export async function getExpectedRate(src: string, dest: string, srcAmount: string) {
   return (await fetch(
     `https://api.kyber.network/expectedRate?source=${src}&dest=${dest}&sourceAmount=${srcAmount}`
-  ).then(r => r.json())) as {
+  ).then((r) => r.json())) as {
     error: boolean
     expectedRate: number
     slippageRate: number

@@ -1,6 +1,6 @@
 import { getUserAccount } from './@decentraland/EthereumController'
 import { getCurrentRealm } from './@decentraland/EnvironmentAPI'
-import * as eth from './eth-connect/eth-connect'
+import * as eth from 'eth-connect'
 import { Profiles } from './types'
 
 /**

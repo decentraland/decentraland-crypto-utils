@@ -3,11 +3,11 @@ import * as eth from 'eth-connect'
 import * as ERC20 from '../../currency/index'
 import * as ERC721 from '../../nft/index'
 import { mainnet as addresses } from '../../utils/contract'
-import { getUserAccount } from '@decentraland/EthereumController'
+import { getUserAccount } from './@decentraland/EthereumController'
 
 /**
  * Check all the authorization for the marketplace
- * 
+ *
  * @param address User address
  */
 export async function isAuthorizedAll(address?: eth.Address) {
@@ -31,42 +31,42 @@ export async function isAuthorizedAll(address?: eth.Address) {
     }
   } = {
     buying: {
-      mana: { address: addresses.MANAToken, authorized: false }
+      mana: { address: addresses.MANAToken, authorized: false },
     },
     bidding: {
-      mana: { address: addresses.MANAToken, authorized: false }
+      mana: { address: addresses.MANAToken, authorized: false },
     },
     selling: {
       land: { address: addresses.LANDProxy, authorized: false },
       estates: { address: addresses.EstateProxy, authorized: false },
       exclusiveMasks: {
         address: addresses.ExclusiveMasksCollection,
-        authorized: false
+        authorized: false,
       },
       halloween: {
         address: addresses.Halloween2019Collection,
-        authorized: false
+        authorized: false,
       },
       xmas: {
         address: addresses.Xmas2019Collection,
-        authorized: false
+        authorized: false,
       },
       mch: { address: addresses.MCHCollection, authorized: false },
       communityContest: {
         address: addresses.CommunityContestCollection,
-        authorized: false
+        authorized: false,
       },
       dclLaunch: {
         address: addresses.DCLLaunchCollection,
-        authorized: false
+        authorized: false,
       },
       dcg: { address: addresses.DCGCollection, authorized: false },
       staySafe: {
         address: addresses.StaySafeCollection,
-        authorized: false
+        authorized: false,
       },
-      names: { address: addresses.DCLRegistrar, authorized: false }
-    }
+      names: { address: addresses.DCLRegistrar, authorized: false },
+    },
   }
 
   authorized.buying.mana.authorized = await ERC20.isApproved(

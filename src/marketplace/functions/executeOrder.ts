@@ -1,6 +1,6 @@
 import * as eth from 'eth-connect'
 
-import { getUserAccount } from '@decentraland/EthereumController'
+import { getUserAccount } from './@decentraland/EthereumController'
 import { getContract } from '../contract'
 import { isApproved, setApproval } from '../../currency/index'
 import delay from '../../utils/delay'
@@ -37,7 +37,7 @@ export async function executeOrder(nftAddress: eth.Address, assetId: number, pri
     assetId,
     eth.toWei(price, 'ether').toString(),
     {
-      from: fromAddress
+      from: fromAddress,
     }
   )
   return res

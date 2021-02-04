@@ -1,4 +1,4 @@
-import { TransactionObject, BlockType, EstimateGasOptions } from '../utils/types'
+import { TransactionObject, BlockType, EstimateGasOptions } from '../../utils/types'
 import * as eth from 'eth-connect'
 
 interface EventOptions {

@@ -1,9 +1,8 @@
-import { getProvider } from '@decentraland/web3-provider'
+import { getProvider } from './@decentraland/web3-provider'
 import * as eth from 'eth-connect'
 
 import abi from './abi'
 import { Marketplace } from './marketplace'
-
 
 /** Return Contract of the Marketplace, Provider and RequestManager */
 export async function getContract(

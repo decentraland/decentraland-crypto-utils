@@ -1,10 +1,5 @@
-import {
-  TransactionObject,
-  BlockType,
-  EstimateGasOptions
-} from '../utils/types'
+import { TransactionObject, BlockType, EstimateGasOptions } from '../utils/types'
 import * as eth from 'eth-connect'
-
 
 interface EventOptions {
   filter?: object
@@ -79,10 +74,7 @@ export class Marketplace extends eth.Contract {
     options?: EstimateGasOptions
   ): TransactionObject<void>
 
-  isMigrated(
-    contractName: string,
-    migrationId: string
-  ): TransactionObject<boolean>
+  isMigrated(contractName: string, migrationId: string): TransactionObject<boolean>
 
   legacyNFTAddress(): TransactionObject<string>
 

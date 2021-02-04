@@ -1,6 +1,6 @@
 import * as eth from 'eth-connect'
 
-import { getUserAccount } from '@decentraland/EthereumController'
+import { getUserAccount } from './@decentraland/EthereumController'
 import { getContract } from '../contract'
 
 /**
@@ -14,7 +14,7 @@ export async function cancelOrder(nftAddress: eth.Address, assetId: number) {
   const fromAddress = await getUserAccount()
 
   const res = await contract.cancelOrder(nftAddress, assetId, {
-    from: fromAddress
+    from: fromAddress,
   })
   return res
 }

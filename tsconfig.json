@@ -3,7 +3,13 @@
 	"compilerOptions": {
 	  "module": "ESNext",
 	  "sourceMap": true,
-	  "declaration": true
+	  "declaration": true,
+	  "paths": {
+		"*": [
+		  "node_modules/eth-connect/eth-connect.d.ts",
+		]
+	  },
 	},
-	"extends": "./node_modules/decentraland-ecs/types/tsconfig.json"
+	"extends": "./node_modules/decentraland-ecs/types/tsconfig.json",
+	
   }

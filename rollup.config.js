@@ -30,14 +30,15 @@ export default {
   input: './src/index.ts',
   context: 'globalThis',
   plugins,
+  external: /@decentraland\//,
   output: [
     {
       file: './dist/index.js',
-      format: 'umd',
-      name: 'crypto-utils',
+      format: 'amd',
+      name: '@dcl/crypto-scene-utils',
       sourcemap: true,
       amd: {
-        id: 'crypto-utils'
+        id: '@dcl/crypto-scene-utils'
       }
     }
   ]
