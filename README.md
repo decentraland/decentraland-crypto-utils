@@ -38,25 +38,17 @@ To use any of the helpers provided by the utils library
 1. Install it as an `npm` package. Run this command in your scene's project folder:
 
 ```
-npm i @dcl/crypto-utils@latest -B
+npm i @dcl/crypto-scene-utils @dcl/ecs-scene-utils eth-connect -B
 ```
+
+> Note: This command also installs the latest version of the @dcl/ecs-scene-utils and eth-connect libraries, that are dependencies of the crypto utils library
 
 2. Run `dcl start` or `dcl build` so the dependencies are correctly installed.
 
 3. Import the library into the scene's script. Add this line at the start of your `game.ts` file, or any other TypeScript files that require it:
 
 ```ts
-import * as crypto from 'crypto-utils'
-```
-
-If you'll only be using part of this library in your scene, we recommend instead only importing the specific relevant subfolder/s. For example:
-
-```ts
-import * as mana from '../node_modules/@dcl/crypto-utils/mana/index'
-import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
-import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
-import * as marketplace from '../node_modules/@dcl/crypto-utils/marketplace/index'
-import * as wearable from '../node_modules/@dcl/crypto-utils/wearable/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 ```
 
 4. In your TypeScript file, write `crypto.` and let the suggestions of your IDE show the available helpers.
@@ -74,20 +66,20 @@ To make players in your scene send MANA to a specific address, use the `send()` 
 - `waitConfirm`: _boolean_ (optional) If true, the function will not be completed till the transaction is mined and added to a block in the blockchain. If false (default value), the function will be completed as soon as the transaction is requested.
 
 ```ts
-mana.send(`0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`, 100)
+crypto.mana.send(`0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`, 100)
 ```
 
 For example, your scene can have a button that requests players to make a MANA payment to the scene cretor's personal wallet. The button opens a door, but only once a transaction is sent to pay the fee.
 
 ```ts
-import * as mana from '../node_modules/@dcl/crypto-utils/mana/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 (...)
 
 let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
 
 button.addComponent(new OnPointerDown(async e => {
-	await mana.send(myWallet, 100, true).then(
+	await crypto.mana.send(myWallet, 100, true).then(
 		// open door
 	)
   }
@@ -107,20 +99,20 @@ Look up how much MANA a player has in their wallet. This is useful to know in ad
 Check the current player's balance with `myBalance()`. This function doesn't require any arguments.
 
 ```ts
-import mana from '../node_modules/@dcl/crypto-utils/mana/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
-let balance = await mana.myBalance()
+let balance = await crypto.mana.myBalance()
 log(balance)
 ```
 
 Check the balance of any other wallet with `balance()`. This function just requires the wallet address to check, as a string.
 
 ```ts
-import * as mana from '../node_modules/@dcl/crypto-utils/mana/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
 
-let balance = await mana.balance(myWallet)
+let balance = await crypto.mana.balance(myWallet)
 log(balance)
 ```
 
@@ -148,14 +140,14 @@ crypto.currency.send(
 For example, your scene can have a button that requests players to make a DAI payment to the scene cretor's personal wallet. The button opens a door, but only once a transaction is sent to pay the fee.
 
 ```ts
-import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 (...)
 
 let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
 
 button.addComponent(new OnPointerDown(async e => {
-	await currency.send('0x6B175474E89094C44Da98b954EedeAC495271d0F', myWallet, 1, true).then(
+	await crypto.currency.send('0x6B175474E89094C44Da98b954EedeAC495271d0F', myWallet, 1, true).then(
 		// open door
 	)
   }
@@ -178,11 +170,11 @@ Check the balance of any other wallet with `balance()`. This function requires t
 - `address`: Wallet address that you want to check the balance of.
 
 ```ts
-import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
 
-let balance = await currency.balance('0x6B175474E89094C44Da98b954EedeAC495271d0F', myWallet)
+let balance = await crypto.currency.balance('0x6B175474E89094C44Da98b954EedeAC495271d0F', myWallet)
 log(balance)
 ```
 
@@ -191,11 +183,11 @@ log(balance)
 Call any functions that are available in a token's contract by instancing a `contract` object. When doing so, you must pass the token's address as a parameter.
 
 ```ts
-import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
 
 executeTask(async () => {
-  const contract = await currency.getContract(mainnet.MANAToken)
+  const contract = await crypto.currency.getContract(crypto.contract.mainnet.MANAToken)
   log(contract.contract.totalSupply())
 })
 ```
@@ -203,7 +195,9 @@ executeTask(async () => {
 The `getContract()` function also returns the `requestManager` object, which you can use to have greater control over the handling of the transaction.
 
 ```ts
-const { contract, requestManager } = await currency.getContract(mainnet.MANAToken)
+const { contract, requestManager } = await crypto.currency.getContract(
+  crypto.contract.mainnet.MANAToken
+)
 ```
 
 ## NFTs
@@ -230,14 +224,14 @@ crypto.nft.transfer(
 For example, your scene can have a button that requires sending any wearable item to the scene cretor's personal wallet. The button opens a door, but only once a transaction is sent to transfer the token.
 
 ```ts
-import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 (...)
 
 let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
 
 button.addComponent(new OnPointerDown(async e => {
-	await nft.transfer(Mainnet.Halloween2019Collection, myWallet, 1, true).then(
+	await crypto.nft.transfer(crypto.contract.mainnet.Halloween2019Collection, myWallet, 1, true).then(
 		// open door
 	)
   }
@@ -262,11 +256,11 @@ This function requires the following arguments:
 The function returns _true_ or _false_ depending on if the player's wallet owns any of the indicated tokens.
 
 ```ts
-import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
-import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+import * as crypto from '@dcl/crypto-scene-utils'
+
 
 executeTask(async () => {
-	let await hasToken = nft.checkTokens(mainnet.Halloween2019Collection, [1, 2, 3, 4, 5])
+	let await hasToken = crypto.nft.checkTokens(crypto..contract.mainnet.Halloween2019Collection, [1, 2, 3, 4, 5])
 	// only open door to vip area for those that have the tokens
 })
 ```
@@ -276,11 +270,11 @@ executeTask(async () => {
 Call any functions that are available in a token's contract by instancing a `contract` object. When doing so, you must pass the token's address as a parameter.
 
 ```ts
-import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
-import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+import * as crypto from '@dcl/crypto-scene-utils'
+
 
 executeTask(async () => {
-  const contract = await nft.getContract(mainnet.Halloween2019Collection)
+  const contract = await crypto.nft.getContract(crypto..contract.mainnet.Halloween2019Collection)
   log(contract.contract.totalSupply())
 })
 ```
@@ -288,7 +282,7 @@ executeTask(async () => {
 The `getContract()` function also returns the `requestManager` object, which you can use to have greater control over the handling of the transaction.
 
 ```ts
-const { contract, requestManager } = await getContract(mainnet.MANAToken)
+const { contract, requestManager } = await getContract(crypto.contract.mainnet.MANAToken)
 ```
 
 ## Signing Messages
@@ -298,10 +292,10 @@ Request a player to use the private key of their Ethereum wallet to sign a messa
 This is a valuable security measure to validate that the player who owns that wallet was truly there, since the signature of a private key can't be forged. Several smart contracts also require passing signed strings as parameters.
 
 ```ts
-import * as ethereum from '../node_modules/@dcl/crypto-utils/ethereum/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 executeTask(async () => {
-  const message = await ethereum.signMessage('msg: this is a top secret message')
+  const message = await crypto.ethereum.signMessage('msg: this is a top secret message')
   log(`MESSAGE: `, message)
 })
 ```
@@ -324,7 +318,7 @@ A separate list exists for contracts on `mainnet`, `ropsten`, `kovan` and `rinke
 ```ts
 import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
 
-log(mainnet.MANAToken)
+log(crypto.contract.mainnet.MANAToken)
 ```
 
 ## The Marketplace
@@ -346,7 +340,7 @@ This function takes three arguments:
 > NOTE: The item needs to be currently published on sale in the Decentraland marketplace.
 
 ```ts
-import * as marketplace from '../node_modules/@dcl/crypto-utils/marketplace/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 
 executeTask(async () => {
@@ -373,10 +367,10 @@ To check if a player has the necessary permissions to buy with the Marketplace a
 - `price`: _string_ How much MANA the player should have in their balance. This number is expressed in full MANA units, not in Wei.
 
 ```ts
-import * as marketplace from '../node_modules/@dcl/crypto-utils/marketplace/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 executeTask(async () => {
-  let permissions = await marketplace.isAuthorizedAndHasBalance(1000)
+  let permissions = await crypto.marketplace.isAuthorizedAndHasBalance(1000)
   log(permissions)
 })
 ```
@@ -386,11 +380,10 @@ This function returns _true_ only if the player has MANA authorized for the Mark
 To make the player approve MANA for spending in the Marketplace, you can use the `setApproval()` function of the `currency` section of this library, like so:
 
 ```ts
-import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
-import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 executeTask(async () => {
-  await currency.setApproval(mainnet.MANAToken, mainnet.Marketplace)
+  await crypto.currency.setApproval(crypto.contract.mainnet.MANAToken, mainnet.Marketplace)
 })
 ```
 
@@ -399,10 +392,10 @@ To check if a player has all of the possible permissions set up for the Marketpl
 - `address`: _string_ (optional) What player address to check for permissions. If no value is provided, it uses the current player running the scene.
 
 ```ts
-import * as marketplace from '../node_modules/@dcl/crypto-utils/marketplace/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 executeTask(async () => {
-  let permissions = await marketplace.isAuthorizedAll()
+  let permissions = await crypto.marketplace.isAuthorizedAll()
   log(permissions)
 })
 ```
@@ -429,16 +422,20 @@ Below is an extract of part of what the response looks like:
 If permissions are missing, they can be added with the `setApproval()` function from the `currency` or the `nft`section of the library, depending on the case.
 
 ```ts
-import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
-import * as nft from '../node_modules/@dcl/crypto-utils/currency/index'
-import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 executeTask(async () => {
   // Give permisions for MANA
-  await currency.setApproval(mainnet.MANAToken, mainnet.Marketplace)
+  await crypto.currency.setApproval(
+    crypto.contract.mainnet.MANAToken,
+    crypto.contract.mainnet.Marketplace
+  )
 
   // Give permissions for a specific wearable collection
-  await nft.setApproval(mainnet.Halloween2019Collection, mainnet.Marketplace)
+  await crypto.nft.setApproval(
+    crypto.contract.mainnet.Halloween2019Collection,
+    crypto.contract.mainnet.Marketplace
+  )
 })
 ```
 
@@ -456,7 +453,7 @@ This function takes three arguments:
 > TIP: If you navigate the Marketplace to a wearable that's on sale, you'll find both the `nftAddress` and `assetId` are part of the URL. For example, in the url _https://market.decentraland.org/contracts/0xd35147be6401dcb20811f2104c33de8e97ed6818/tokens/28706_, the `nftAddress` is _0xd35147be6401dcb20811f2104c33de8e97ed6818_ and the `assetId` is _28706_. You can obtain all the required data about wearables on sale by querying the Marketplace API.
 
 ```ts
-import * as marketplace from '../node_modules/@dcl/crypto-utils/marketplace/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 
 executeTask(async () => {
@@ -482,7 +479,7 @@ This function takes two arguments:
 > TIP: If you navigate the Marketplace to a wearable that's on sale, you'll find both the `nftAddress` and `assetId` are part of the URL. For example, in the url _https://market.decentraland.org/contracts/0xd35147be6401dcb20811f2104c33de8e97ed6818/tokens/28706_, the `nftAddress` is _0xd35147be6401dcb20811f2104c33de8e97ed6818_ and the `assetId` is _28706_. You can obtain all the required data about wearables on sale by querying the Marketplace API.
 
 ```ts
-import * as marketplace from '../node_modules/@dcl/crypto-utils/marketplace/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 
 executeTask(async () => {
@@ -529,11 +526,13 @@ To check if a contract has permissions to handle a specific currency token for a
 - `spender`: _string_ Address of the contract to check for having permissions to spend the token
 
 ```ts
-import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
-import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 executeTask(async () => {
-  let approval = await currency.isApproved(mainnet.MANAToken, mainnet.Marketplace)
+  let approval = await crypto.currency.isApproved(
+    crypto.contract.mainnet.MANAToken,
+    crypto.contract.mainnet.Marketplace
+  )
   log(approval)
 })
 ```
@@ -547,11 +546,13 @@ To check how much is the maximum allowance that a contract has to handle a speci
 - `spender`: _string_ Address of the contract to check for having permissions to spend the token
 
 ```ts
-import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
-import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 executeTask(async () => {
-  let approval = await currency.allowance(mainnet.MANAToken, mainnet.Marketplace)
+  let approval = await crypto.currency.allowance(
+    crypto.contract.mainnet.MANAToken,
+    crypto.contract.mainnet.Marketplace
+  )
   log(approval)
 })
 ```
@@ -566,11 +567,14 @@ To grant permissions to a contract to handle a specific currency token for a pla
 - `amount`: _string_ (optional) Maximum amount of the currency to allow the spender to spend
 
 ```ts
-import * as currency from '../node_modules/@dcl/crypto-utils/currency/index'
-import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 executeTask(async () => {
-  await currency.setApproval(mainnet.MANAToken, mainnet.Marketplace, true)
+  await crypto.currency.setApproval(
+    crypto.contract.mainnet.MANAToken,
+    crypto.contract.mainnet.Marketplace,
+    true
+  )
 })
 ```
 
@@ -583,11 +587,13 @@ To check if a contract has permissions to handle a specific type of NFT for a pl
 - `operator`: _string_ Address of the contract to check for having permissions to handle the token
 
 ```ts
-import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
-import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 executeTask(async () => {
-  let approval = await nft.isApproved(mainnet.Halloween2019Collection, mainnet.Marketplace)
+  let approval = await crypto.nft.isApproved(
+    crypto.contract.mainnet.Halloween2019Collection,
+    crypto.contract.mainnet.Marketplace
+  )
   log(approval)
 })
 ```
@@ -601,11 +607,14 @@ To grant permissions to a contract to handle a specific NFT for a player, use th
 - `approved`: _boolean_ (optional) If _true_, sets the contract as approved for this NFT, if _false_, it removes these same approvals. _true_ by default.
 
 ```ts
-import * as nft from '../node_modules/@dcl/crypto-utils/nft/index'
-import { mainnet } from '../node_modules/@dcl/crypto-utils/utils/contract'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 executeTask(async () => {
-  await nft.setApprovalForAll(mainnet.Halloween2019Collection, mainnet.Marketplace, true)
+  await crypto.nft.setApprovalForAll(
+    crypto.contract.mainnet.Halloween2019Collection,
+    crypto.contract.mainnet.Marketplace,
+    true
+  )
 })
 ```
 
@@ -617,17 +626,20 @@ Call any functions that are available in any smart contract by instancing a `con
 - `abi`: The ABI definition for the contract, where all of its functions and parameters are listed
 
 ```ts
-import { getContract } from '../node_modules/@dcl/crypto-utils/utils/contract'
-
 executeTask(async () => {
-  const contract = await getContract('0xF87E31492Faf9A91B02Ee0dEAAd50d51d56D5d4d', LANDAbi)
+  const contract = await crypto.contract.getContract(
+    '0xF87E31492Faf9A91B02Ee0dEAAd50d51d56D5d4d',
+    LANDAbi
+  )
 })
 ```
 
 The `getContract()` function also returns the `requestManager` object, which you can use to have greater control over the handling of the transaction.
 
 ```ts
-const { contract, requestManager } = await currency.getContract(mainnet.MANAToken)
+const { contract, requestManager } = await crypto.currency.getContract(
+  crypto.contract.mainnet.MANAToken
+)
 ```
 
 You can obtain the ABI of a contract on etherscan. For example, if you go to the Etherscan page for the [LAND contract](https://etherscan.io/address/0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d#code), you can find the ABI by picking the _Contract_ tab in the bottom section and then scrolling down. You can export the ABI to JSON, and add that as a file in your scene's project, or paste its contents into a _.ts_ file in your scene's project.
@@ -647,9 +659,9 @@ If an address is not specified, the function will use the address of the current
 This example retrieves the data of an address and prints the username in console:
 
 ```ts
-import * as avatar from '../node_modules/@dcl/crypto-utils/avatar/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
-avatar.getUserInfo('0x521b0fef9cdcf250abaf8e7bc798cbe13fa98692').then((userInfo) => {
+crypto.avatar.getUserInfo('0x521b0fef9cdcf250abaf8e7bc798cbe13fa98692').then((userInfo) => {
   log(userInfo.metadata.avatars[0].name)
 })
 ```
@@ -681,9 +693,9 @@ If an address is not specified, the function will use the address of the current
 This example retrieves the inventory of an address and print a list of items in the console:
 
 ```ts
-import * as avatar from '../node_modules/@dcl/crypto-utils/avatar/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
-avatar.getUserInventory('0x521b0fef9cdcf250abaf8e7bc798cbe13fa98692').then((inventory) => {
+crypto.avatar.getUserInventory('0x521b0fef9cdcf250abaf8e7bc798cbe13fa98692').then((inventory) => {
   log(inventory)
 })
 ```
@@ -707,12 +719,14 @@ To check if an item is in the inventory of a player, use the `itemInInventory` f
 This example checks if the player has the _Razor Blade Jacket_ wearable equiped. If so, the function returns _true_.
 
 ```ts
-import * as avatar from '../node_modules/@dcl/crypto-utils/avatar/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
-avatar.itemInInventory('dcl://dcl_launch/razor_blade_upper_body', true).then((isItemEquiped) => {
-  if (isItemEquiped) log('The Razor Blade jacket is equiped')
-  else log('This item is not equiped')
-})
+crypto.avatar
+  .itemInInventory('dcl://dcl_launch/razor_blade_upper_body', true)
+  .then((isItemEquiped) => {
+    if (isItemEquiped) log('The Razor Blade jacket is equiped')
+    else log('This item is not equiped')
+  })
 ```
 
 > Tip: You can find out the full name of a wearable by using `getListOfWearables()` to get a full list of all wearables supported by Decentraland, with all their information.
@@ -730,9 +744,9 @@ To check if at least one of several items are in the inventory of a player, use 
 This example checks if the player has the Razor Blade Jacket equiped or the Tuxedo Shirt. If so, the function returns _true_.
 
 ```ts
-import * as avatar from '../node_modules/@dcl/crypto-utils/avatar/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
-avatar
+crypto.avatar
   .itemsInInventory(
     [
       'dcl://dcl_launch/razor_blade_upper_body',
@@ -753,10 +767,10 @@ avatar
 To fetch a full list of all wearables supported by Decentraland, including their full names, categories, contracts, etc, call the `getListOfWearables()`. This function doesn't take any arguments.
 
 ```ts
-import * as wearable from '../node_modules/@dcl/crypto-utils/wearalbe/index'
+import * as crypto from '@dcl/crypto-scene-utils'
 
 executeTask(async () => {
-  const allWearables = await wearable.getListOfWearables()
+  const allWearables = await crypto.wearable.getListOfWearables()
   log(allWearables)
 })
 ```
