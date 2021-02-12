@@ -27,7 +27,6 @@
   "homepage": "https://github.com/decentraland/decentraland-crypto-utils#readme",
   "devDependencies": {
     "decentraland-ecs": "^6.6.3",
-    "decentraland-ecs-utils": "^1.4.8",
     "eth-connect": "^5.0.0",
     "prettier": "^2.2.1",
     "rollup": "^2.35.1",
