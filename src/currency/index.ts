@@ -1,10 +1,10 @@
-import { getProvider } from './@decentraland/web3-provider'
-import { getUserAccount } from './@decentraland/EthereumController'
+import { getProvider } from '@decentraland/web3-provider'
+import { getUserAccount } from '@decentraland/EthereumController'
 import * as eth from 'eth-connect'
 
 import abi from './abi'
 import { Erc20 } from './erc20'
-import delay from '../../utils/delay'
+import delay from '../utils/delay'
 
 /**
  * Return Contract, Provider and RequestManager

@@ -1,5 +1,5 @@
-import { getProvider } from './@decentraland/web3-provider'
-import { getUserAccount } from './@decentraland/EthereumController'
+import { getProvider } from '@decentraland/web3-provider'
+import { getUserAccount } from '@decentraland/EthereumController'
 import * as eth from 'eth-connect'
 
 import abi from './abi'

@@ -42,9 +42,13 @@
     "access": "public"
   },
   "bundleDependencies": [
-    "eth-connect"
+    "eth-connect",
+    "@dcl/ecs-scene-utils"
   ],
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "@dcl/ecs-scene-utils": "^1.6.1"
+  }
 }

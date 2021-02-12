@@ -1,4 +1,4 @@
-import { getUserAccount } from './@decentraland/EthereumController'
+import { getUserAccount } from '@decentraland/EthereumController'
 import { allowance } from '../../currency/index'
 import { mainnet as Addresses } from '../../utils/contract'
 import { toWei } from 'eth-connect'

@@ -1,6 +1,6 @@
 import * as eth from 'eth-connect'
 
-import { getUserAccount } from './@decentraland/EthereumController'
+import { getUserAccount } from '@decentraland/EthereumController'
 import { getContract } from '../contract'
 import { isApprovedForAll, setApprovalForAll } from '../../nft/index'
 import delay from '../../utils/delay'

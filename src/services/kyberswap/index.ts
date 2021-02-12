@@ -1,5 +1,5 @@
-import { getUserAccount } from './@decentraland/EthereumController'
-import { getProvider } from './@decentraland/web3-provider'
+import { getUserAccount } from '@decentraland/EthereumController'
+import { getProvider } from '@decentraland/web3-provider'
 import * as eth from 'eth-connect'
 
 import currencies from './currencies'
