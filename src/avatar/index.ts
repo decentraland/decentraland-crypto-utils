@@ -27,8 +27,9 @@ export async function getUserInfo(address?: eth.Address) {
  */
 export async function getUserInventory(address?: eth.Address) {
   if (!address) address = await getUserAccount()
-  const profile = await getUserInfo(address)
-  return profile.metadata.avatars[0].inventory
+  const response = await fetch(`https://wearable-api.decentraland.org/v2/addresses/${address}/wearables?fields=id`)
+  const inventory: { id: string }[] = await response.json()
+  return inventory.map((wearable) => wearable.id)
 }
 
 /**
@@ -44,7 +45,8 @@ export async function itemInInventory(wearable: string, equiped: boolean = false
       if (item == wearable) return true
     }
   } else {
-    for (const item of profile.metadata.avatars[0].inventory) {
+    const inventory = await getUserInventory()
+    for (const item of inventory) {
       if (item == wearable) return true
     }
   }
@@ -64,7 +66,8 @@ export async function itemsInInventory(wearables: string[], equiped: boolean = f
       if (wearables.indexOf(item) != -1) return true
     }
   } else {
-    for (const item of profile.metadata.avatars[0]?.inventory) {
+    const inventory = await getUserInventory()
+    for (const item of inventory) {
       if (wearables.indexOf(item) != -1) return true
     }
   }
