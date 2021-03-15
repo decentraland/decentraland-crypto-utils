@@ -762,6 +762,33 @@ crypto.avatar
 
 > Tip: You can find out the full name of a wearable by using `getListOfWearables()` to get a full list of all wearables supported by Decentraland, with all their information.
 
+
+### Get the rarity of the player's rarest item
+
+Use the `rarestItem()` function to find out what's the rarest item that the player owns. 
+
+It returns the rarity category as a value from the `rarityLevel` enum.
+
+`rarestItem()` has one optional argument:
+
+- `equiped`: _boolean_ (optional) if true, only the items currently equipped are considered.
+
+This example checks what's the rarest item owned and logs the category name.
+
+```ts
+import * as crypto from '@dcl/crypto-scene-utils'
+
+crypto.avatar
+  .rarestItem(
+    true
+  )
+  .then((item) => {
+   log('rarest item equipped: ', rarityLevel[item] )
+  })
+```
+
+> Tip: To see the name of the rarity category, rather than the index, reference the `rarityLevel` enum, for example `rarityLevel[response]`.
+
 ### Get data of all wearables
 
 To fetch a full list of all wearables supported by Decentraland, including their full names, categories, contracts, etc, call the `getListOfWearables()`. This function doesn't take any arguments.

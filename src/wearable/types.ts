@@ -51,12 +51,14 @@ export enum Code {
 }
 
 export enum Rarity {
-  Epic = 'epic',
-  Legendary = 'legendary',
-  Mythic = 'mythic',
-  Rare = 'rare',
-  Uncommon = 'uncommon'
-}
+	Unique = 'unique',
+	Legendary = 'legendary',
+	Mythic = 'mythic',
+	Epic = 'epic',
+	Rare = 'rare',
+	Uncommon = 'uncommon',
+	Common = 'common',
+  }
 
 export interface Representation {
   bodyShapes: BodyShape[]
@@ -80,3 +82,14 @@ export interface Content {
 export enum Type {
   Wearable = 'wearable'
 }
+
+export enum rarityLevel {
+	none,
+	common,
+	uncommon,
+	rare,
+	epic,
+	mythic,
+	legendary,
+	unique,
+  }
