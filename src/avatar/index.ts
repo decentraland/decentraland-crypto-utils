@@ -1,7 +1,8 @@
 import { getUserAccount } from '@decentraland/EthereumController'
 import { getCurrentRealm } from '@decentraland/EnvironmentAPI'
 import * as eth from 'eth-connect'
-import { Profiles } from './types'
+import { Profiles, Snapshots } from './types'
+import { Rarity, rarityLevel, Wearable } from '../wearable/types'
 
 /**
  * Returns profile of an address
@@ -31,6 +32,21 @@ export async function getUserInventory(address?: eth.Address) {
   const inventory: { id: string }[] = await response.json()
   return inventory.map((wearable) => wearable.id)
 }
+
+
+/**
+ * Returns wearables inventory of an address with full data on each wearable
+ *
+ * @param address ETH address
+ */
+ export async function getUserFullInventory(address?: eth.Address) {
+	if (!address) address = await getUserAccount()
+	const response = await fetch(
+	  `https://wearable-api.decentraland.org/v2/addresses/${address}/wearables`
+	)
+	const inventory: Wearable[] = await response.json()
+	return inventory
+  }
 
 /**
  * Returns boolean if the user has an item in their inventory or equiped
@@ -81,3 +97,88 @@ export async function equipedItems() {
   const profile = await getUserInfo()
   return profile.metadata.avatars[0]?.avatar.wearables
 }
+
+
+let rarestEquippedItem: rarityLevel = 0
+
+/**
+ * Returns the rarity of the rarest item that the player has in their inventory or equiped
+ *
+ * @param equiped true if currently wearing
+ */
+ export async function rarestItem(
+	equiped: boolean = false
+  ): Promise<rarityLevel> {
+	const profile = await getUserInfo()
+	const inventory = await getUserFullInventory()
+	if (!profile || !inventory) return rarityLevel.none
+	
+	if (equiped) {
+	  for (const item of profile.metadata.avatars[0]?.avatar.wearables) {
+		for (let invItem of inventory) {
+		  if (item == invItem.id && invItem.rarity) {
+			updateRarity(invItem.rarity)
+		  }
+		}
+	  }
+	} else {
+	  for (let invItem of inventory) {
+		if (invItem.rarity) {
+		  updateRarity(invItem.rarity)
+		}
+	  }
+	}
+	log(rarityLevel[rarestEquippedItem])
+	return rarestEquippedItem
+  }
+  
+  export function updateRarity(rarity: Rarity) {
+	let rarityNum: number = 0
+	switch (rarity) {
+	  case 'common':
+		rarityNum = 1
+		break
+	  case 'uncommon':
+		rarityNum = 2
+		break
+	  case 'rare':
+		rarityNum = 3
+		break
+	  case 'epic':
+		rarityNum = 4
+		break
+	  case 'mythic':
+		rarityNum = 5
+		break
+	  case 'legendary':
+		rarityNum = 6
+		break
+	  case 'unique':
+		rarityNum = 7
+		break
+	}
+	if (rarityNum > rarestEquippedItem) {
+	  rarestEquippedItem = rarityNum
+	  //log('new Rarest ', rarestEquippedItem, ' ')
+	}
+  }
+  
+
+  /**
+ * Returns a Snapshots object, containing URLs to various snapshots of a player's face and full body
+ *
+ * @param playerID the ID of the player
+ */
+export async function getPlayerSnapshots(playerId?: string) :Promise<Snapshots|null> {
+	if(!playerId){
+		const profile = await getUserInfo()
+		playerId = profile.id
+	}
+	const realm = await getCurrentRealm().then((r: any) =>
+	r.domain != 'http://127.0.0.1:8000' ? r.domain : 'https://peer.decentraland.org'
+  )
+
+  return (await fetch(`${realm}/lambdas/profiles?field=snapshots&id=${playerId.toLowerCase()}`)
+    .then((res) => res.json())
+    .then((res) => (res[0].avatars.length ? res[0].avatars[0].avatar.snapshots as Snapshots : null)))
+  }
