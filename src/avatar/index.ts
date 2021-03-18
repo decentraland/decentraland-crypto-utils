@@ -1,7 +1,7 @@
 import { getUserAccount } from '@decentraland/EthereumController'
 import { getCurrentRealm } from '@decentraland/EnvironmentAPI'
 import * as eth from 'eth-connect'
-import { Profiles } from './types'
+import { Profiles, Snapshots } from './types'
 import { Rarity, rarityLevel, Wearable } from '../wearable/types'
 
 /**
@@ -163,3 +163,23 @@ let rarestEquippedItem: rarityLevel = 0
 	}
   }
   
+
+  /**
+ * Returns a Snapshots object, containing URLs to various snapshots of a player's face and full body
+ *
+ * @param playerID the ID of the player
+ */
+export async function getPlayerSnapshots(playerId?: string) :Promise<Snapshots|null> {
+	if(!playerId){
+		const profile = await getUserInfo()
+		playerId = profile.id
+	}
+	const realm = await getCurrentRealm().then((r: any) =>
+	r.domain != 'http://127.0.0.1:8000' ? r.domain : 'https://peer.decentraland.org'
+  )
+
+  return (await fetch(`${realm}/lambdas/profiles?field=snapshots&id=${playerId.toLowerCase()}`)
+    .then((res) => res.json())
+    .then((res) => (res.avatars.length ? res.avatars[0].avatar.snapshots as Snapshots : null)))
+
+  }

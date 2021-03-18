@@ -680,6 +680,44 @@ The `getUserData()` function returns the following information:
 
 > Note: For any Ethereum transactions with the player, always use the `ethAddress` field, instead of the `userId`.
 
+### Get a user's snapshot images
+
+Use `getPlayerSnapshots()` to fetch a set of URLs for snapshots of the player wearing the current wearables they have on. These snapshots are available in different resolutions, and both of the face and full body.
+
+The response contains the following data:
+
+- `face`: URL for the full resolution image of the face, with 512x512 pixels
+- `face128`: URL for the face as a 128x128 pixel image
+- `face256`: URL for the face as a 256x256 pixel image
+- `body`: URL for the full resolution image of the face, with 512x1024 pixels
+
+Optionally pass a player id to fetch the snapshots of that player's particular avatar, it will otherwise fetch the snapshots of the player's avatar.
+
+
+```ts
+import * as crypto from '@dcl/crypto-scene-utils'
+
+// create an entity to use as canvas
+let planeEntity = new Entity()
+planeEntity.addComponent(new Transform( {position: new Vector3(8, 1, 8)}))
+planeEntity.addComponent(new PlaneShape())
+engine.addEntity(planeEntity)
+
+// fetch snapshot data
+crypto.avatar.getPlayerSnapshots('0x521b0fef9cdcf250abaf8e7bc798cbe13fa98692').then((snapShots) => {
+  log(snapShots)
+
+  // apply snapshot to the plane entity
+  let faceTexture = new Texture(snapShots.face256)
+  let faceMaterial = new Material()
+  faceMaterial.albedoTexture = faceTexture
+  planeEntity.addComponent(faceMaterial)
+})
+```
+
+This example fetches the snapshots from a specific player, then sets that as a texture on a plane.
+
+
 ### Get user inventory
 
 To fetch the full inventory of wearable items owned by a player, use the `getUserInventory()` function.
