@@ -180,6 +180,5 @@ export async function getPlayerSnapshots(playerId?: string) :Promise<Snapshots|n
 
   return (await fetch(`${realm}/lambdas/profiles?field=snapshots&id=${playerId.toLowerCase()}`)
     .then((res) => res.json())
-    .then((res) => (res.avatars.length ? res.avatars[0].avatar.snapshots as Snapshots : null)))
-
+    .then((res) => (res[0].avatars.length ? res[0].avatars[0].avatar.snapshots as Snapshots : null)))
   }

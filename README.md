@@ -708,10 +708,12 @@ crypto.avatar.getPlayerSnapshots('0x521b0fef9cdcf250abaf8e7bc798cbe13fa98692').t
   log(snapShots)
 
   // apply snapshot to the plane entity
-  let faceTexture = new Texture(snapShots.face256)
-  let faceMaterial = new Material()
-  faceMaterial.albedoTexture = faceTexture
-  planeEntity.addComponent(faceMaterial)
+  if (snapShots) {
+    let faceTexture = new Texture(snapShots.face256)
+    let faceMaterial = new Material()
+    faceMaterial.albedoTexture = faceTexture
+    planeEntity.addComponent(faceMaterial)
+  }
 })
 ```
 
