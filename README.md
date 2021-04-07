@@ -805,7 +805,7 @@ crypto.avatar
 
 ### Get the rarity of the player's rarest item
 
-Use the `rarestItem()` function to find out what's the rarest item that the player owns. 
+Use the `rarestItem()` function to find out what's the rarest item that the player owns.
 
 It returns the rarity category as a value from the `rarityLevel` enum.
 
@@ -831,43 +831,26 @@ crypto.avatar
 
 ### Get data of all wearables
 
-To fetch a full list of all wearables supported by Decentraland, including their full names, categories, contracts, etc, call the `getListOfWearables()`. This function doesn't take any arguments.
+To fetch a list of wearables supported by Decentraland, including their full names, categories, contracts, etc, call the `getListOfWearables()`. This function supports the following filters:
+```ts
+{
+  collectionIds: string[]
+  wearableIds: string[]
+  textSearch: string
+}
+
+```
 
 ```ts
 import * as crypto from '@dcl/crypto-scene-utils'
 
 executeTask(async () => {
-  const allWearables = await crypto.wearable.getListOfWearables()
-  log(allWearables)
+  const someWearables = await crypto.wearable.getListOfWearables({ collectionIds: ['urn:decentraland:ethereum:collections-v1:mf_sammichgamer'] })
+  log(someWearables)
 })
 ```
 
-This function returns an array of wearable collections, where each of these collections has a `wearables` field that contains a list of all wearables in that collection. Below is an extract of what this data looks like:
-
-```ts
-[ {id: "halloween_2019", wearables: [
-		{
-			baseUrl: "https://wearable-api.decentraland.org/v2/collections/halloween_2019/",
-			category: "earring",
-			description: "It may be someone else's head but that doesn't mean you can't look good",
-			hides: [],
-			i18n:0: [{code: "en", text: "Spider Earrings"}, {code: "es", text: "Pendientes de Araña"}],
-			id: "dcl://halloween_2019/bride_of_frankie_earring",
-			image: "QmZsnoehbtLDfk2FKbpDAk8nFatknSFQFqphF6RQu3Nkd7",
-			rarity: "mythic",
-			replaces: [],
-			representations: [{…}],
-			tags: (6) ["accesories", "exclusive", "earrings", "halloween", "spider", "exclusive"],
-			thumbnail: "QmSfe6dHYXAvsbMBTNGWwHtsr2aBoMjUrCW2TeLbCPw4oZ",
-			type: "wearable"
-		}, (...)
-	]
-  },
-  {id: "xmas_2019", wearables: [(...)]},
-  (...)
-]
-```
-
+This function returns an array of wearables.
 
 ---
 
