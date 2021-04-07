@@ -51,9 +51,11 @@ export async function getUserInventory(address?: eth.Address) {
   const inventory: { amount: number, definition: any }[] = await response.json()
   const result: Wearable[] = []
   for (const { definition, amount } of inventory) {
-    const mapped = mapV2WearableIntoV1(catalystUrl, definition)
-    for (let i = 0; i < amount; i++) {
-      result.push(mapped)
+    if (definition) {
+      const mapped = mapV2WearableIntoV1(catalystUrl, definition)
+      for (let i = 0; i < amount; i++) {
+        result.push(mapped)
+      }
     }
   }
   return result
