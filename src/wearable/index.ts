@@ -22,7 +22,7 @@ function convertObjectToQueryParamString(object: Record<string, number | boolean
     } else {
       values = [`${value}`]
     }
-    result += result.length > 0 ? `?` : '&'
+    result += result.length === 0 ? `?` : '&'
     result += `${name}=` + values.join(`&${name}=`)
   }
   return result
