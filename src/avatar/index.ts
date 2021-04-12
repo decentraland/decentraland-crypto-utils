@@ -118,12 +118,13 @@ let rarestEquippedItem: rarityLevel = 0
 	if (!profile || !inventory) return rarityLevel.none
 
 	if (equiped) {
-	  for (const item of profile.metadata.avatars[0]?.avatar.wearables) {
-		for (let invItem of inventory) {
-		  if (item == invItem.id && invItem.rarity) {
-			updateRarity(invItem.rarity)
-		  }
-		}
+    const equipedAsUrn = profile.metadata.avatars[0]?.avatar?.wearables?.map(mapToUrn)
+	  for (const item of equipedAsUrn) {
+      for (let invItem of inventory) {
+        if (item === invItem.id && invItem.rarity) {
+          updateRarity(invItem.rarity)
+        }
+      }
 	  }
 	} else {
 	  for (let invItem of inventory) {
