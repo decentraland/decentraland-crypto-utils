@@ -119,7 +119,7 @@ let rarestEquippedItem: rarityLevel = 0
 
 	if (equiped) {
     const equipedAsUrn = profile.metadata.avatars[0]?.avatar?.wearables?.map(mapToUrn)
-	  for (const item of equipedAsUrn) {
+    for (const item of equipedAsUrn) {
       for (let invItem of inventory) {
         if (item === invItem.id && invItem.rarity) {
           updateRarity(invItem.rarity)
