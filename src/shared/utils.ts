@@ -1,9 +1,9 @@
-import { getCurrentRealm } from "@decentraland/EnvironmentAPI"
+import { getCurrentRealm, isPreviewMode } from "@decentraland/EnvironmentAPI"
 import { Representation, Type, Wearable } from "../wearable/types"
 
-export function getCatalystUrl(): Promise<string> {
-  return getCurrentRealm()
-    .then((r: any) => r.domain != 'http://127.0.0.1:8000' &&  r.domain != 'http://192.168.0.18:8000'  ? r.domain : 'https://peer.decentraland.org')
+export async function getCatalystUrl(): Promise<string> {
+  const inPreview = await isPreviewMode()
+  return inPreview ? 'https://peer.decentraland.org' : getCurrentRealm().then(({ domain }) => domain)
 }
 
 export function mapV2WearableIntoV1(catalystUrl: string, v2Wearable: any): Wearable {
