@@ -101,8 +101,10 @@ Check the current player's balance with `myBalance()`. This function doesn't req
 ```ts
 import * as crypto from '@dcl/crypto-scene-utils'
 
-let balance = await crypto.mana.myBalance()
-log(balance)
+executeTask(async () => {
+	let balance = await crypto.mana.myBalance()
+	log(balance)
+})
 ```
 
 Check the balance of any other wallet with `balance()`. This function just requires the wallet address to check, as a string.
@@ -112,8 +114,10 @@ import * as crypto from '@dcl/crypto-scene-utils'
 
 let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
 
-let balance = await crypto.mana.balance(myWallet)
-log(balance)
+executeTask(async () => {
+	let balance = await crypto.mana.balance(myWallet)
+	log(balance)
+})
 ```
 
 ## Other Currencies
@@ -174,8 +178,10 @@ import * as crypto from '@dcl/crypto-scene-utils'
 
 let myWallet = `0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`
 
-let balance = await crypto.currency.balance('0x6B175474E89094C44Da98b954EedeAC495271d0F', myWallet)
-log(balance)
+executeTask(async () => {
+	let balance = await crypto.currency.balance('0x6B175474E89094C44Da98b954EedeAC495271d0F', myWallet)
+	log(balance)
+})
 ```
 
 ### Other functions
