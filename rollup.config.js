@@ -1,45 +1,42 @@
-
-import resolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
-import { terser } from 'rollup-plugin-terser'
-import typescript from 'rollup-plugin-typescript2'
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import typescript from '@rollup/plugin-typescript';
+import { terser } from 'rollup-plugin-terser';
+import packageJson from './package.json'
 
 const PROD = !!process.env.CI
 
-console.log(`production: ${PROD}`)
-
-const plugins = [
-  typescript({
-    verbosity: 2,
-    clean: true
-  }),
-  resolve({
-    browser: true,
-    preferBuiltins: false
-  }),
-  commonjs({
-    ignoreGlobal: true,
-    include: [/node_modules/],
-    namedExports: {}
-  }),
-
-  PROD && terser({})
-]
-
 export default {
-  input: './src/index.ts',
+  input: 'src/index.ts',
   context: 'globalThis',
-  plugins,
-  external: /(@decentraland\/|@dcl\/|eth-connect)/,
+  external: [/@dcl\//, /@decentraland\//],
   output: [
     {
-      file: './dist/index.js',
+      file: packageJson.main,
       format: 'amd',
-      name: '@dcl/crypto-scene-utils',
-      sourcemap: true,
       amd: {
-        id: '@dcl/crypto-scene-utils'
-      }
-    }
-  ]
-}
+        id: packageJson.name
+      },
+    },
+  ],
+  plugins: [
+    resolve({
+      preferBuiltins: false,
+      browser: true
+    }),
+    typescript({
+      tsconfig: './tsconfig.json',
+      sourceMap: false,
+      compilerOptions: {
+        sourceMap: false,
+        inlineSourceMap: false,
+        inlineSources: false
+      },
+    }),
+    commonjs({
+      exclude: 'node_modules',
+      ignoreGlobal: true,
+    }),
+    true && terser({ format: { comments: false } }),
+  ],
+};

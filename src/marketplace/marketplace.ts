@@ -7,7 +7,7 @@ interface EventOptions {
   topics?: string[]
 }
 
-export class Marketplace extends eth.Contract {
+export interface Marketplace extends eth.Contract {
   constructor(jsonInterface: any[], address?: string, options?: any)
   clone(): Marketplace
   setOwnerCutPerMillion(

@@ -7,7 +7,7 @@ interface EventOptions {
   topics?: string[]
 }
 
-export class Erc721 extends eth.Contract {
+export interface Erc721 extends eth.Contract {
   constructor(jsonInterface: any[], address?: string, options?: any)
   clone(): Erc721
   supportsInterface(interfaceId: string | number[]): TransactionObject<boolean>

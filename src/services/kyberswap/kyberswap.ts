@@ -7,7 +7,7 @@ interface EventOptions {
   topics?: string[]
 }
 
-export class Kyberswap extends eth.Contract {
+export interface Kyberswap extends eth.Contract {
   constructor(jsonInterface: any[], address?: string, options?: any)
   clone(): Kyberswap
   addAlerter(newAlerter: string): TransactionObject<void>

@@ -7,7 +7,7 @@ interface EventOptions {
   topics?: string[]
 }
 
-export class Erc20 extends eth.Contract {
+export interface Erc20 extends eth.Contract {
   constructor(jsonInterface: any[], address?: string, options?: any)
   clone(): Erc20
   name(): TransactionObject<string>
