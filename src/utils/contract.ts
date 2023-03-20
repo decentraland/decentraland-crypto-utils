@@ -1,4 +1,4 @@
-import { getProvider } from '@decentraland/web3-provider'
+import { createEthereumProvider } from '@dcl/sdk/ethereum-provider'
 import * as eth from 'eth-connect'
 
 export const mainnet = {
@@ -108,7 +108,7 @@ export const rinkeby = {
 }
 
 export async function getContract(contractAddress: string, abi: any) {
-  const provider = await getProvider()
+  const provider = await createEthereumProvider()
   const requestManager = new eth.RequestManager(provider)
   const factory = new eth.ContractFactory(requestManager, abi)
   const contract = (await factory.at(contractAddress)) as any

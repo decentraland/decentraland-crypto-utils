@@ -1,4 +1,4 @@
-import { getUserAccount } from '@decentraland/EthereumController'
+import { getUserData } from "~system/UserIdentity"
 import * as eth from '@decentraland/EthereumController'
 
 /**

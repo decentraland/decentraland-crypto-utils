@@ -1,9 +1,10 @@
 import * as eth from 'eth-connect'
 
-import { getUserAccount } from '@decentraland/EthereumController'
+import { getUserData } from "~system/UserIdentity"
 import { getContract } from '../contract'
 import { isApprovedForAll, setApprovalForAll } from '../../nft/index'
 import delay from '../../utils/delay'
+import { getPlayerAddress } from '../../avatar/index'
 
 /**
  * Create an order, price in MANA (1 = 1 MANA)
@@ -20,7 +21,7 @@ export async function createOrder(
   expireAt: number = +new Date() / 1000 + 30 * 24 * 3600
 ) {
   const { contract, requestManager } = await getContract()
-  const fromAddress = await getUserAccount()
+  const fromAddress = await getPlayerAddress()
 
   const approval = await isApprovedForAll(nftAddress, fromAddress, contract.address)
   if (!approval)
