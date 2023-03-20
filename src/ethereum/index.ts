@@ -1,4 +1,4 @@
-import { getUserAccount } from '@decentraland/EthereumController'
+import { getUserData } from "~system/UserIdentity"
 import * as eth from '@decentraland/EthereumController'
 
 /**
@@ -12,3 +12,5 @@ export async function signMessage(messageToSign: string) {
   const { message, signature } = await eth.signMessage(convertedMessage)
   return { message, signature }
 }
+
+//TODO: REWRITE SIGN MESSAGE WITHOUT ETHEREUMCOTROLLER
