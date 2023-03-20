@@ -12,3 +12,5 @@ export async function signMessage(messageToSign: string) {
   const { message, signature } = await eth.signMessage(convertedMessage)
   return { message, signature }
 }
+
+//TODO: REWRITE SIGN MESSAGE WITHOUT ETHEREUMCOTROLLER
