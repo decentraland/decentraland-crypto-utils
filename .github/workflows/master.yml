@@ -13,7 +13,7 @@ jobs:
   install:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # @v4.3.0
       - name: Use Node.js 16.x
         uses: actions/setup-node@v1
         with:
@@ -23,7 +23,7 @@ jobs:
       - name: build
         run: npm run build
       - name: Publish
-        uses: menduz/oddish-action@master
+        uses: decentraland/oddish-action@914e7c59e93e708152aa703c50196740c0526c1d # @master
         with:
           #cwd: ./dist
           access: public
