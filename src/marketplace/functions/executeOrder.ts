@@ -1,9 +1,10 @@
 import * as eth from 'eth-connect'
 
-import { getUserAccount } from '@decentraland/EthereumController'
+
 import { getContract } from '../contract'
 import { isApproved, setApproval } from '../../currency/index'
 import delay from '../../utils/delay'
+import { getPlayerAddress } from '../../avatar/index'
 
 /**
  * Execute an order on the market and buy the item
@@ -14,7 +15,7 @@ import delay from '../../utils/delay'
  */
 export async function executeOrder(nftAddress: eth.Address, assetId: number, price: number) {
   const { contract, requestManager } = await getContract()
-  const fromAddress = await getUserAccount()
+  const fromAddress = await getPlayerAddress()
 
   const approved = await isApproved(
     '0x0F5D2fB29fb7d3CFeE444a200298f468908cC942',

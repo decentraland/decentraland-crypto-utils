@@ -1,5 +1,5 @@
-import { getProvider } from '@decentraland/web3-provider'
-import { getUserAccount } from '@decentraland/EthereumController'
+import { createEthereumProvider } from '@dcl/sdk/ethereum-provider'
+import { getUserData } from "~system/UserIdentity"
 import * as eth from 'eth-connect'
 
 import abi from './abi'
@@ -12,7 +12,7 @@ import delay from '../utils/delay'
  * @param contractAddress Smartcontract ETH address
  */
 export async function getContract(contractAddress: eth.Address) {
-  const provider = await getProvider()
+  const provider = await createEthereumProvider()
   const requestManager = new eth.RequestManager(provider)
   const factory = new eth.ContractFactory(requestManager, abi)
   const contract = (await factory.at(contractAddress)) as Erc20

@@ -1,5 +1,5 @@
-import { getUserAccount } from '@decentraland/EthereumController'
-import { getProvider } from '@decentraland/web3-provider'
+import { getUserData } from "~system/UserIdentity"
+import { createEthereumProvider } from '@dcl/sdk/ethereum-provider'
 import * as eth from 'eth-connect'
 
 import currencies from './currencies'
@@ -9,7 +9,7 @@ import abi from './abi'
 import { Kyberswap } from './kyberswap'
 
 export async function getContract(contractAddress: eth.Address) {
-  const provider = await getProvider()
+  const provider = await createEthereumProvider()
   const requestManager = new eth.RequestManager(provider)
   const factory = new eth.ContractFactory(requestManager, abi)
   const contract = (await factory.at(contractAddress)) as Kyberswap

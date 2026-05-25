@@ -1,10 +1,10 @@
-import { getProvider } from '@decentraland/web3-provider'
-import { getUserAccount } from '@decentraland/EthereumController'
+import { createEthereumProvider } from '@dcl/sdk/ethereum-provider'
 import * as eth from 'eth-connect'
 
 import abi from './abi'
 import { Erc721 } from './erc721'
 import delay from '../utils/delay'
+import { getPlayerAddress } from '../avatar/index'
 
 /**
  * Return Contract, Provider and RequestManager
@@ -12,7 +12,7 @@ import delay from '../utils/delay'
  * @param contractAddress Smartcontract ETH address
  */
 export async function getContract(contractAddress: eth.Address) {
-  const provider = await getProvider()
+  const provider = await createEthereumProvider()
   const requestManager = new eth.RequestManager(provider)
   const factory = new eth.ContractFactory(requestManager, abi)
   const contract = (await factory.at(contractAddress)) as Erc721
@@ -34,7 +34,7 @@ export async function transfer(
   waitConfirm: boolean = false
 ) {
   const { contract, requestManager } = await getContract(contractAddress)
-  const fromAddress = await getUserAccount()
+  const fromAddress =  await getPlayerAddress()
 
   const res = await contract.transferFrom(
     fromAddress.toLowerCase(),
@@ -96,7 +96,7 @@ export async function isApprovedForAll(
  */
 export async function checkTokens(contractAddress: eth.Address, tokenIds?: number | number[]) {
   const { contract } = await getContract(contractAddress)
-  const fromAddress = await getUserAccount()
+  const fromAddress = await getPlayerAddress()
 
   let balance = await contract.balanceOf(fromAddress)
 
