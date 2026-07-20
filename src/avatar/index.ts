@@ -1,9 +1,23 @@
-import { getUserAccount } from '@decentraland/EthereumController'
+import { getUserData } from "~system/UserIdentity"
 import { getCurrentRealm } from '@decentraland/EnvironmentAPI'
 import * as eth from 'eth-connect'
 import { Profiles, Snapshots } from './types'
 import { Rarity, rarityLevel, Representation, Type, Wearable } from '../wearable/types'
 import { getCatalystUrl, mapV2WearableIntoV1 } from '../shared/utils'
+
+
+
+export async function getPlayerAddress(){
+
+	let userData = await getUserData({})
+	if(userData.data.hasConnectedWeb3){
+		return userData.data.publicKey.toLowerCase()
+	} else {
+		console.log("USER HAS NO WALLET")
+	return false
+	}	
+}
+
 
 /**
  * Returns profile of an address
@@ -14,7 +28,7 @@ export async function getUserInfo(address?: eth.Address) {
   const realm = address
     ? 'https://peer.decentraland.org'
     : await getCatalystUrl()
-  if (!address) address = await getUserAccount().then((a) => a.toLowerCase())
+  if (!address) address = await getPlayerAddress()
   return (await fetch(`${realm}/content/entities/profiles?pointer=${address?.toLowerCase()}`)
     .then((res) => res.json())
     .then((res) => (res.length ? res[0] : res))) as Profiles
@@ -26,7 +40,8 @@ export async function getUserInfo(address?: eth.Address) {
  * @param address ETH address
  */
 export async function getUserInventory(address?: eth.Address) {
-  if (!address) address = await getUserAccount()
+  if (!address) address = await getPlayerAddress()
+  
   const catalystUrl = await getCatalystUrl()
   const response = await fetch(`${catalystUrl}/lambdas/collections/wearables-by-owner/${address}`)
   const inventory: { urn: string, amount: number }[] = await response.json()
@@ -45,7 +60,7 @@ export async function getUserInventory(address?: eth.Address) {
  * @param address ETH address
  */
  export async function getUserFullInventory(address?: eth.Address) {
-	if (!address) address = await getUserAccount()
+	if (!address) address = await getPlayerAddress()
 	const catalystUrl = await getCatalystUrl()
   const response = await fetch(`${catalystUrl}/lambdas/collections/wearables-by-owner/${address}?includeDefinitions`)
   const inventory: { amount: number, definition: any }[] = await response.json()
@@ -133,7 +148,7 @@ let rarestEquippedItem: rarityLevel = 0
 		}
 	  }
 	}
-	log(rarityLevel[rarestEquippedItem])
+	console.log(rarityLevel[rarestEquippedItem])
 	return rarestEquippedItem
   }
 

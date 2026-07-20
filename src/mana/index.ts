@@ -1,5 +1,6 @@
 import * as eth from 'eth-connect'
-import { getUserAccount } from '@decentraland/EthereumController'
+import { getUserData } from "~system/UserIdentity"
+import { getPlayerAddress } from '../avatar/index'
 
 import * as ERC20 from '../currency/index'
 
@@ -23,7 +24,7 @@ export function send(toAddress: eth.Address, amount: number, waitConfirm: boolea
  * Return the balance of the current user
  */
 export async function myBalance() {
-  const fromAddress = await getUserAccount()
+  const fromAddress = = await getPlayerAddress()
   return ERC20.balance('0x0f5d2fb29fb7d3cfee444a200298f468908cc942', fromAddress)
 }
 

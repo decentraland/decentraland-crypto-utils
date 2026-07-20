@@ -3,7 +3,7 @@ import * as eth from 'eth-connect'
 import * as ERC20 from '../../currency/index'
 import * as ERC721 from '../../nft/index'
 import { mainnet as addresses } from '../../utils/contract'
-import { getUserAccount } from '@decentraland/EthereumController'
+import { getPlayerAddress } from '../../avatar/index'
 
 /**
  * Check all the authorization for the marketplace
@@ -11,7 +11,7 @@ import { getUserAccount } from '@decentraland/EthereumController'
  * @param address User address
  */
 export async function isAuthorizedAll(address?: eth.Address) {
-  if (!address) address = await getUserAccount()
+  if (!address) address = await getPlayerAddress()
 
   const authorized: {
     buying: { mana: { address: eth.Address; authorized: boolean } }

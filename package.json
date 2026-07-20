@@ -1,58 +1,56 @@
 {
-  "name": "@dcl/crypto-scene-utils",
-  "version": "1.0.0",
-  "description": "A collection of helpers to make it easier to build a Decentraland scene using the SDK.",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "scripts": {
-    "build": "rm -rf temp/ && rollup -c",
-    "link": "npm link && rollup --watch -c ",
-    "test": "jest --detectOpenHandles --silent=false --verbose --colors --runInBand"
-  },
-  "typings": "./dist/index.d.ts",
-  "decentralandLibrary": {
-    "main": "./dist/index.js"
-  },
-  "keywords": [
-    "dcl",
-    "decentraland",
-    "sdk",
-    "library"
-  ],
-  "author": "Decentraland",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/decentraland/decentraland-crypto-utils.git"
-  },
-  "files": [
-    "dist",
-    "!dist/types"
-  ],
-  "devDependencies": {
-    "@microsoft/api-documenter": "^7.17.11",
-    "@rollup/plugin-commonjs": "^21.0.2",
-    "@rollup/plugin-node-resolve": "^13.1.3",
-    "@rollup/plugin-typescript": "^8.3.1",
-    "@types/jest": "^27.4.1",
-    "decentraland-ecs": "latest",
-    "jest": "^27.5.1",
-    "rollup": "^2.70.1",
-    "rollup-plugin-terser": "^7.0.2",
-    "ts-jest": "^27.1.4",
-    "tslib": "^2.5.0"
-  },
-  "bundleDependencies": [
-    "eth-connect",
-    "@dcl/ecs-scene-utils"
-  ],
-  "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=8.0.0",
-    "yarn": "please use npm"
-  },
-  "dependencies": {
-    "@dcl/ecs-scene-utils": "^1.7.5",
-    "eth-connect": "^6.1.0"
-  }
+	"name": "@dcl/crypto-scene-utils",
+	"version": "1.0.0",
+	"description": "A collection of helpers to make it easier to build a Decentraland scene using the SDK.",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"scripts": {
+		"build": "rm -rf temp/ && rollup -c",
+		"link": "npm link && rollup --watch -c ",
+		"test": "jest --detectOpenHandles --silent=false --verbose --colors --runInBand"
+	},
+	"typings": "./dist/index.d.ts",
+	"decentralandLibrary": {
+		"main": "./dist/index.js"
+	},
+	"keywords": [
+		"dcl",
+		"decentraland",
+		"sdk",
+		"library"
+	],
+	"author": "Decentraland",
+	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/decentraland/decentraland-crypto-utils.git"
+	},
+	"files": [
+		"dist",
+		"!dist/types"
+	],
+	"devDependencies": {
+		"@microsoft/api-documenter": "^7.17.11",
+		"@rollup/plugin-commonjs": "^21.0.2",
+		"@rollup/plugin-node-resolve": "^13.1.3",
+		"@rollup/plugin-typescript": "^8.3.1",
+		"@types/jest": "^27.4.1",
+		"decentraland-ecs": "latest",
+		"jest": "^27.5.1",
+		"rollup": "^2.70.1",
+		"rollup-plugin-terser": "^7.0.2",
+		"ts-jest": "^27.1.4",
+		"tslib": "^2.5.0"
+	},
+	"bundleDependencies": [
+		"eth-connect"
+	],
+	"engines": {
+		"node": ">=16.0.0",
+		"npm": ">=8.0.0",
+		"yarn": "please use npm"
+	},
+	"dependencies": {
+		"eth-connect": "^6.1.0"
+	}
 }
